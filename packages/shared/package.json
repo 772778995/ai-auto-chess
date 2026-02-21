@@ -1,0 +1,47 @@
+{
+  "name": "@game/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared types and utilities for the game project",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
+    },
+    "./schemas": {
+      "types": "./dist/schemas/index.d.ts",
+      "import": "./dist/schemas/index.js"
+    }
+  },
+  "scripts": {
+    "build": "bun run build:tsc",
+    "build:tsc": "bunx tsc",
+    "dev": "bunx tsc --watch --locale zh-CN",
+    "lint": "bunx oxlint",
+    "lint:fix": "bunx oxlint --fix",
+    "test": "bunx vitest run",
+    "test:watch": "bunx vitest"
+  },
+  "dependencies": {
+    "zod": "^3.23.8",
+    "jsondiffpatch": "^0.6.0",
+    "msgpackr": "^1.8.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vitest": "^2.0.5",
+    "oxlint": "^0.16.0"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "@game/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Game frontend with Vue 3, Vite, Phaser, and UnoCSS",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "type-check": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "@game/shared": "workspace:*",
+    "@unocss/reset": "^0.58.0",
+    "@vueuse/core": "^14.2.1",
+    "jsondiffpatch": "^0.6.0",
+    "msgpackr": "^1.8.5",
+    "ofetch": "^1.4.1",
+    "phaser": "^3.85.0",
+    "pinia": "^2.1.7",
+    "unocss": "^0.58.0",
+    "vue": "^3.5.12",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.4",
+    "@vitejs/plugin-vue-jsx": "^4.1.0",
+    "@vue/test-utils": "^2.4.5",
+    "@vue/tsconfig": "^0.5.1",
+    "jsdom": "^24.0.0",
+    "playwright": "^1.50.0",
+    "typescript": "^5.6.3",
+    "unocss": "^0.58.0",
+    "unplugin-auto-import": "^0.18.2",
+    "vite": "^5.4.8",
+    "vitest": "^2.0.5",
+    "vue-tsc": "^2.1.8",
+    "oxlint": "^0.16.0",
+    "@unocss/transformer-directives": "^0.58.0",
+    "@unocss/transformer-variant-group": "^0.58.0"
+  }
+}

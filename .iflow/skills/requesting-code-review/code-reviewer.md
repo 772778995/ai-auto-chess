@@ -9,6 +9,12 @@
 4. 按严重性分类问题
 5. 评估生产就绪性
 
+## 工作区上下文
+
+**工作区根目录：** {WORKTREE_PATH}
+
+> ⚠️ **重要：** 所有文件路径都相对于上述工作区根目录。使用 `cd {WORKTREE_PATH} && git diff ...` 等命令。
+
 ## 实现了什么
 
 {DESCRIPTION}
@@ -23,6 +29,7 @@
 **头部：** {HEAD_SHA}
 
 ```bash
+cd {WORKTREE_PATH}
 git diff --stat {BASE_SHA}..{HEAD_SHA}
 git diff {BASE_SHA}..{HEAD_SHA}
 ```

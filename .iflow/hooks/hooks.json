@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .iflow/hooks/session-start",
+            "timeout": 30,
+            "async": false
+          }
+        ]
+      }
+    ],
+    "PreImplementation": [
+      {
+        "matcher": "^implement|^code|^develop|^build",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git status --short",
+            "timeout": 10,
+            "async": false
+          }
+        ]
+      }
+    ]
+  }
+}

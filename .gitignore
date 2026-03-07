@@ -128,5 +128,9 @@ packages/server/drizzle/
 !packages/server/drizzle/.gitkeep
 packages/web/public/assets/generated/
 
+# Worktrees
+.worktrees/
+worktrees/
+
 # UnoCSS
 *.css

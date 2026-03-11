@@ -50,10 +50,10 @@ export interface SerializedEffect {
 
 // 效果上下文
 export interface EffectContext {
-  gameState: unknown   // GameState，避免循环引用
+  gameState: unknown   // GameState - 避免循环引用，实际包含 { allies, enemies, ... }
   self: FollowerInstance
   tools: EffectTools
-  event?: GameEvent
+  event?: EffectGameEvent
 }
 
 // 效果工具
@@ -66,8 +66,8 @@ export interface EffectTools {
   getColumnAllies: (state: unknown, x: number) => FollowerInstance[]
 }
 
-// 游戏事件
-export interface GameEvent {
+// 效果触发事件（用于效果函数）
+export interface EffectGameEvent {
   type: 'attack' | 'damage' | 'kill' | 'death'
   source?: FollowerInstance
   target?: FollowerInstance

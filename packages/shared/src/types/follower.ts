@@ -1,61 +1,135 @@
 // packages/shared/src/types/follower.ts
 import { z } from 'zod'
-import { keywordSchema, type Keyword } from './keyword'
 
-// 战场位置 (3x2 布局)
+// ===== 战场位置 =====
+
 export interface BattlePosition {
   side: 'ally' | 'enemy'
   x: 0 | 1 | 2
   y: 0 | 1
 }
 
-// 随从模板
+// ===== 触发时机 =====
+
+export type TriggerTiming =
+  | 'onEnter'       // 入场
+  | 'onGrowth'      // 成长
+  | 'onFirstStrike' // 先手
+  | 'onAttack'      // 攻击后
+  | 'onHit'         // 受击
+  | 'onKill'        // 击杀
+  | 'onDeath'       // 死亡（遗言）
+  | 'onRoundEnd'    // 回合结束（准备）
+
+// ===== 状态项 =====
+
+export interface StatusItem {
+  attack?: number      // 攻击力加成
+  health?: number      // 生命上限加成
+  shield?: number      // 护盾层数
+  permanent: boolean   // 是否永久保留
+  source: string       // 来源描述
+}
+
+// ===== 效果系统 =====
+
+// 效果函数（前置声明，避免循环引用）
+export type EffectFunction = (ctx: EffectContext) => unknown
+
+// 效果定义
+export interface EffectDefinition {
+  description: string
+  execute: EffectFunction
+}
+
+// 序列化效果
+export interface SerializedEffect {
+  description: string
+  execute: string
+}
+
+// 效果上下文
+export interface EffectContext {
+  gameState: unknown   // GameState，避免循环引用
+  self: FollowerInstance
+  tools: EffectTools
+  event?: GameEvent
+}
+
+// 效果工具
+export interface EffectTools {
+  cloneDeep: <T>(obj: T) => T
+  getRandomEnemy: (state: unknown, pos?: BattlePosition) => FollowerInstance | null
+  getRandomAlly: (state: unknown, pos?: BattlePosition) => FollowerInstance | null
+  getAllAllies: (state: unknown) => FollowerInstance[]
+  getAllEnemies: (state: unknown) => FollowerInstance[]
+  getColumnAllies: (state: unknown, x: number) => FollowerInstance[]
+}
+
+// 游戏事件
+export interface GameEvent {
+  type: 'attack' | 'damage' | 'kill' | 'death'
+  source?: FollowerInstance
+  target?: FollowerInstance
+  value?: number
+}
+
+// ===== 随从模板 =====
+
 export interface Follower {
   id: string
   name: string
   description: string
   level: 1 | 2 | 3 | 4 | 5 | 6
-  attack: number
-  health: number
-  shield?: number
-  keywords: Keyword[]
+  baseAttack: number
+  baseHealth: number
+  effects: Partial<Record<TriggerTiming, EffectDefinition>>
   equipmentSlots: number
   imageUrl: string
 }
 
-// 随从实例（战场上）
-export interface FollowerInstance extends Follower {
+// 序列化随从
+export interface SerializedFollower extends Omit<Follower, 'effects'> {
+  effects: Partial<Record<TriggerTiming, SerializedEffect>>
+}
+
+// ===== 随从实例 =====
+
+export interface FollowerInstance extends Omit<Follower, 'effects'> {
   instanceId: string
   ownerId: string
   position: BattlePosition
-  currentAttack: number
   currentHealth: number
-  currentShield: number
-  equipment: string[]  // 装备ID数组
-  buffs: Buff[]
-  debuffs: Debuff[]
+  statusList: StatusItem[]
+  equipment: string[]
+  // 静态属性
+  taunt?: boolean
 }
 
-// Buff/Debuff
-export interface Buff {
-  id: string
-  keywordId: string
-  stacks: number
-  duration?: number
-}
+// ===== Zod 模式 =====
 
-export interface Debuff {
-  id: string
-  keywordId: string
-  stacks: number
-  duration?: number
-}
-
-// Zod 模式
 export const battlePositionSchema = z.object({
   side: z.enum(['ally', 'enemy']),
   x: z.union([z.literal(0), z.literal(1), z.literal(2)]),
   y: z.union([z.literal(0), z.literal(1)])
+})
+
+export const triggerTimingSchema = z.enum([
+  'onEnter', 'onGrowth', 'onFirstStrike', 'onAttack',
+  'onHit', 'onKill', 'onDeath', 'onRoundEnd'
+])
+
+export const statusItemSchema = z.object({
+  attack: z.number().optional(),
+  health: z.number().optional(),
+  shield: z.number().optional(),
+  permanent: z.boolean(),
+  source: z.string()
+})
+
+export const serializedEffectSchema = z.object({
+  description: z.string(),
+  execute: z.string()
 })
 
 export const followerSchema = z.object({
@@ -63,34 +137,24 @@ export const followerSchema = z.object({
   name: z.string(),
   description: z.string(),
   level: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5), z.literal(6)]),
-  attack: z.number(),
-  health: z.number(),
-  shield: z.number().optional(),
-  keywords: z.array(keywordSchema),
+  baseAttack: z.number(),
+  baseHealth: z.number(),
+  effects: z.record(z.any()).optional(),
   equipmentSlots: z.number(),
   imageUrl: z.string()
 })
-
-export const buffSchema = z.object({
-  id: z.string(),
-  keywordId: z.string(),
-  stacks: z.number(),
-  duration: z.number().optional()
-})
-
-export const debuffSchema = buffSchema
 
 export const followerInstanceSchema = followerSchema.extend({
   instanceId: z.string(),
   ownerId: z.string(),
   position: battlePositionSchema,
-  currentAttack: z.number(),
   currentHealth: z.number(),
-  currentShield: z.number(),
+  statusList: z.array(statusItemSchema),
   equipment: z.array(z.string()),
-  buffs: z.array(buffSchema),
-  debuffs: z.array(debuffSchema)
+  taunt: z.boolean().optional()
 })
+
+// ===== 类型导出 =====
 
 export type FollowerType = z.infer<typeof followerSchema>
 export type FollowerInstanceType = z.infer<typeof followerInstanceSchema>

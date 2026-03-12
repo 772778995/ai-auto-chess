@@ -3,6 +3,26 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
 import { relations } from 'drizzle-orm'
 
+// ===== 共用基础字段 =====
+
+// id + createdAt + updatedAt（完整基础字段）
+export const baseFields = {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}
+
+// id + createdAt（无 updatedAt）
+export const baseFieldsNoUpdate = {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}
+
+// 仅 id
+export const idField = {
+  id: uuid('id').primaryKey().defaultRandom(),
+}
+
 // 用户表
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),

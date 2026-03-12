@@ -127,6 +127,31 @@ export const playerStatsRelations = relations(playerStats, ({ one }) => ({
   }),
 }))
 
+// 玩家闯关进度表
+export const playerProgress = pgTable('player_progress', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id).notNull().unique(),
+
+  // 关卡解锁进度
+  highestClearedLevel: integer('highest_cleared_level').default(0).notNull(), // 最高通关关卡
+  unlockedLevels: integer('unlocked_levels').array().default([1]).notNull(), // 已解锁关卡列表
+
+  // 难度解锁
+  unlockedDifficulties: text('unlocked_difficulties').array().default(['normal']).notNull(),
+
+  // 元数据
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
+// 玩家进度关系
+export const playerProgressRelations = relations(playerProgress, ({ one }) => ({
+  user: one(users, {
+    fields: [playerProgress.userId],
+    references: [users.id],
+  }),
+}))
+
 // 游戏事件表
 export const gameEvents = pgTable('game_events', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -179,6 +204,14 @@ export const insertRoomPlayerSchema = createInsertSchema(roomPlayers).omit({
   leftAt: true,
 })
 
+export const insertPlayerProgressSchema = createInsertSchema(playerProgress).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+})
+
+export const selectPlayerProgressSchema = createSelectSchema(playerProgress)
+
 // 导出的类型
 export type User = typeof users.$inferSelect
 export type InsertUser = typeof users.$inferInsert
@@ -190,3 +223,5 @@ export type RoomPlayer = typeof roomPlayers.$inferSelect
 export type InsertRoomPlayer = typeof roomPlayers.$inferInsert
 export type PlayerStats = typeof playerStats.$inferSelect
 export type GameEvent = typeof gameEvents.$inferSelect
+export type PlayerProgress = typeof playerProgress.$inferSelect
+export type InsertPlayerProgress = typeof playerProgress.$inferInsert

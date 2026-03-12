@@ -5,7 +5,7 @@
 **目的：** 验证实现者构建了请求的内容（不多也不少）
 
 ```
-Task 工具 (general-purpose):
+Task 工具 (subagent_type="spec-reviewer"):
   description: "审查任务 N 的规范合规性"
   prompt: |
     你正在审查实现是否与其规范匹配。

@@ -3,7 +3,7 @@
 派遣实现者子代理时使用此模板。
 
 ```
-Task 工具 (general-purpose):
+Task 工具 (subagent_type="implementer"):
   description: "实现任务 N: [任务名称]"
   prompt: |
     你正在实现任务 N: [任务名称]

@@ -7,7 +7,7 @@
 **只在规范合规性审查通过后派遣。**
 
 ```
-Task 工具 (subagent_type="general-purpose"):
+Task 工具 (subagent_type="code-quality-reviewer"):
   description: "审查任务 N 的代码质量"
   prompt: |
     你正在审查代码质量。

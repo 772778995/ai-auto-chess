@@ -1,4 +1,5 @@
 import type { Follower, FollowerInstance, EffectContext } from '../types/follower'
+import { defaultOnAttack } from '../utils/effects'
 
 export type { Follower, FollowerInstance } from '../types/follower'
 
@@ -13,7 +14,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 1,
     baseAttack: 2,
     baseHealth: 1,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f001.png'
   },
@@ -26,6 +29,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
+      onAttack: defaultOnAttack,
       onKill: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -49,6 +53,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 1,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const target = ctx.tools.getRandomEnemy(newState, ctx.self.position)
@@ -69,7 +74,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 1,
     baseAttack: 1,
     baseHealth: 3,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f004.png'
   },
@@ -82,6 +89,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -104,7 +112,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 1,
     baseAttack: 0,
     baseHealth: 4,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f006.png'
   },
@@ -117,6 +127,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -140,6 +151,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -163,6 +175,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
+      onAttack: defaultOnAttack,
       onDeath: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -180,6 +193,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
+      onAttack: defaultOnAttack,
       onDeath: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -197,6 +211,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 实现发现逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -213,7 +228,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 1,
     baseAttack: 1,
     baseHealth: 1,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f012.png'
   },
@@ -227,7 +244,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 2,
     baseAttack: 3,
     baseHealth: 2,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f013.png'
   },
@@ -240,6 +259,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 1,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 疯狂是静态属性，需要在 FollowerInstance 中标记
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -257,6 +277,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
+      onAttack: defaultOnAttack,
       onFirstStrike: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -279,7 +300,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 2,
     baseAttack: 2,
     baseHealth: 4,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f016.png'
   },
@@ -292,6 +315,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 3,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -315,6 +339,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -338,6 +363,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 1,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -361,6 +387,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
+      onAttack: defaultOnAttack,
       onDeath: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -378,6 +405,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 3,
     effects: {
+      onAttack: defaultOnAttack,
       onDeath: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -394,7 +422,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 2,
     baseAttack: 1,
     baseHealth: 2,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f022.png'
   },
@@ -406,7 +436,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 2,
     baseAttack: 1,
     baseHealth: 2,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f023.png'
   },
@@ -421,6 +453,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 3,
     effects: {
+      onAttack: defaultOnAttack,
       onKill: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -444,6 +477,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 3,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         return ctx.tools.cloneDeep(ctx.gameState)
       }
@@ -459,7 +493,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 3,
     baseAttack: 3,
     baseHealth: 6,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f026.png'
   },
@@ -472,6 +508,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -489,6 +526,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -512,6 +550,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 0,
     baseHealth: 3,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         // TODO: 实现变形逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -529,6 +568,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 3,
     effects: {
+      onAttack: defaultOnAttack,
       onDeath: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -546,6 +586,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -563,6 +604,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 实现发现逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -580,6 +622,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 3,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -599,6 +642,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 6,
     baseHealth: 4,
     effects: {
+      onAttack: defaultOnAttack,
       onFirstStrike: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -622,6 +666,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
+      onAttack: defaultOnAttack,
       onKill: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const target = ctx.tools.getRandomEnemy(newState, ctx.self.position)
@@ -643,6 +688,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 5,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -666,7 +712,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 4,
     baseAttack: 2,
     baseHealth: 8,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f037.png'
   },
@@ -679,6 +727,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 5,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -702,6 +751,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -725,6 +775,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
+      onAttack: defaultOnAttack,
       onDeath: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -742,6 +793,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 3,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -759,6 +811,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 4,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -776,6 +829,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
+      onAttack: defaultOnAttack,
       onRoundEnd: (ctx: EffectContext) => {
         // TODO: 实现金币逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -795,6 +849,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 8,
     baseHealth: 5,
     effects: {
+      onAttack: defaultOnAttack,
       onFirstStrike: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -818,6 +873,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 5,
     effects: {
+      onAttack: defaultOnAttack,
       onKill: (ctx: EffectContext) => {
         // TODO: 实现消灭逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -835,6 +891,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 10,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -859,6 +916,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 8,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -876,6 +934,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 6,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -899,6 +958,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 5,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -923,6 +983,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 6,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -940,6 +1001,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
+      onAttack: defaultOnAttack,
       onDeath: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -957,6 +1019,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 5,
     effects: {
+      onAttack: defaultOnAttack,
       onFirstStrike: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const allies = ctx.tools.getAllAllies(newState)
@@ -978,6 +1041,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 5,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 实现发现逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -997,6 +1061,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 10,
     baseHealth: 8,
     effects: {
+      onAttack: defaultOnAttack,
       onFirstStrike: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -1019,7 +1084,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     level: 6,
     baseAttack: 12,
     baseHealth: 6,
-    effects: {},
+    effects: {
+      onAttack: defaultOnAttack
+    },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f055.png'
   },
@@ -1032,6 +1099,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 15,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -1056,6 +1124,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 12,
     effects: {
+      onAttack: defaultOnAttack,
       onHit: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -1079,6 +1148,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 8,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
@@ -1102,6 +1172,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 6,
     baseHealth: 6,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const allies = ctx.tools.getAllAllies(newState)
@@ -1123,6 +1194,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 6,
     baseHealth: 7,
     effects: {
+      onAttack: defaultOnAttack,
       onEnter: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -1140,6 +1212,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 6,
     effects: {
+      onAttack: defaultOnAttack,
       onDeath: (ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -1157,6 +1230,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 6,
     effects: {
+      onAttack: defaultOnAttack,
       onGrowth: (ctx: EffectContext) => {
         // TODO: 实现发现逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
@@ -1174,6 +1248,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 5,
     effects: {
+      onAttack: defaultOnAttack,
       onFirstStrike: (ctx: EffectContext) => {
         // TODO: 拼点效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)

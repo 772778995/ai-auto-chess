@@ -9,96 +9,158 @@ import {
   serializeFollower,
   deserializeFollower
 } from './serialization'
-import type { Follower, EffectContext, TriggerTiming } from '../types/follower'
+import type {
+  Follower,
+  EffectContext,
+  EffectFunction,
+  FollowerInstance,
+  TriggerTiming,
+  BattlePosition
+} from '../types/follower'
 
 describe('序列化工具', () => {
+  // 创建模拟的 EffectContext
+  function createMockContext(overrides?: Partial<EffectContext>): EffectContext {
+    const mockPosition: BattlePosition = { side: 'ally', x: 0, y: 0 }
+    const mockFollower: FollowerInstance = {
+      id: 'test-follower',
+      name: 'Test Follower',
+      description: 'Test',
+      level: 1,
+      baseAttack: 2,
+      baseHealth: 3,
+      instanceId: 'test-instance',
+      ownerId: 'player-1',
+      position: mockPosition,
+      currentHealth: 3,
+      statusList: [],
+      equipment: [],
+      equipmentSlots: 1,
+      imageUrl: 'test.png'
+    }
+
+    return {
+      gameState: {
+        allies: [mockFollower],
+        enemies: [],
+        turn: 1
+      },
+      self: mockFollower,
+      tools: {
+        cloneDeep: <T>(obj: T) => JSON.parse(JSON.stringify(obj)),
+        getRandomEnemy: () => null,
+        getRandomAlly: () => mockFollower,
+        getAllAllies: () => [mockFollower],
+        getAllEnemies: () => [],
+        getColumnAllies: () => [mockFollower]
+      },
+      event: undefined,
+      ...overrides
+    }
+  }
+
   describe('serializeEffect / deserializeEffect', () => {
     it('应该能够序列化和反序列化简单的效果函数', () => {
       const effect: EffectFunction = (ctx) => {
-        ctx.damage += 1
-      }
-
-      const serialized = serializeEffect(effect)
-      const deserialized = deserializeEffect(serialized)
-
-      const mockCtx: EffectContext = {
-        sourceId: 'follower-1',
-        targetId: 'follower-2',
-        damage: 0,
-        healing: 0,
-        flags: []
-      }
-
-      deserialized(mockCtx)
-      expect(mockCtx.damage).toBe(1)
-    })
-
-    it('应该能够处理空效果', () => {
-      const effect: EffectFunction = () => {
-        // 空效果
-      }
-
-      const serialized = serializeEffect(effect)
-      const deserialized = deserializeEffect(serialized)
-
-      expect(deserialized).toBeInstanceOf(Function)
-    })
-
-    it('应该能够处理复杂的效果函数（包含条件判断）', () => {
-      const effect: EffectFunction = (ctx) => {
-        if (ctx.damage > 0) {
-          ctx.damage *= 2
+        // 简单效果：返回修改后的游戏状态
+        return {
+          gameState: ctx.gameState,
+          events: []
         }
       }
 
       const serialized = serializeEffect(effect)
       const deserialized = deserializeEffect(serialized)
 
-      const mockCtx1: EffectContext = {
-        sourceId: 'follower-1',
-        targetId: 'follower-2',
-        damage: 2,
-        healing: 0,
-        flags: []
-      }
+      const mockCtx = createMockContext()
+      const result = deserialized(mockCtx)
 
-      deserialized(mockCtx1)
-      expect(mockCtx1.damage).toBe(4)
-
-      const mockCtx2: EffectContext = {
-        sourceId: 'follower-1',
-        targetId: 'follower-2',
-        damage: 0,
-        healing: 0,
-        flags: []
-      }
-
-      deserialized(mockCtx2)
-      expect(mockCtx2.damage).toBe(0)
+      expect(result).toEqual({
+        gameState: mockCtx.gameState,
+        events: []
+      })
     })
 
-    it('应该能够处理带有多个操作的效果函数', () => {
-      const effect: EffectFunction = (ctx) => {
-        ctx.damage += 2
-        ctx.healing += 1
-        ctx.flags.push('test-flag')
+    it('应该能够处理空效果', () => {
+      const effect: EffectFunction = () => {
+        // 空效果
+        return {
+          gameState: {},
+          events: []
+        }
       }
 
       const serialized = serializeEffect(effect)
       const deserialized = deserializeEffect(serialized)
 
-      const mockCtx: EffectContext = {
-        sourceId: 'follower-1',
-        targetId: 'follower-2',
-        damage: 0,
-        healing: 0,
-        flags: []
+      expect(deserialized).toBeInstanceOf(Function)
+
+      const mockCtx = createMockContext()
+      const result = deserialized(mockCtx)
+      expect(result).toBeDefined()
+    })
+
+    it('应该能够处理复杂的效果函数（包含条件判断）', () => {
+      const effect: EffectFunction = (ctx) => {
+        // 条件判断效果
+        const allies = ctx.tools.getAllAllies(ctx.gameState)
+        if (allies.length > 0) {
+          return {
+            gameState: ctx.gameState,
+            events: [{
+              type: 'heal',
+              targets: [ctx.self],
+              value: 1
+            }]
+          }
+        }
+        return {
+          gameState: ctx.gameState,
+          events: []
+        }
       }
 
-      deserialized(mockCtx)
-      expect(mockCtx.damage).toBe(2)
-      expect(mockCtx.healing).toBe(1)
-      expect(mockCtx.flags).toEqual(['test-flag'])
+      const serialized = serializeEffect(effect)
+      const deserialized = deserializeEffect(serialized)
+
+      const mockCtx = createMockContext()
+      const result = deserialized(mockCtx)
+
+      expect(result.events).toBeDefined()
+      expect(result.events?.[0].type).toBe('heal')
+    })
+
+    it('应该能够处理带有多个操作的效果函数', () => {
+      const effect: EffectFunction = (ctx) => {
+        // 多个操作效果
+        return {
+          gameState: ctx.gameState,
+          events: [
+            {
+              type: 'damage',
+              targets: [ctx.self],
+              value: 2,
+              damageType: 'physical',
+              source: ctx.self
+            },
+            {
+              type: 'heal',
+              targets: [ctx.self],
+              value: 1
+            }
+          ]
+        }
+      }
+
+      const serialized = serializeEffect(effect)
+      const deserialized = deserializeEffect(serialized)
+
+      const mockCtx = createMockContext()
+      const result = deserialized(mockCtx)
+
+      expect(result.events).toHaveLength(2)
+      expect(result.events?.[0].type).toBe('damage')
+      expect(result.events?.[1].type).toBe('heal')
     })
 
     it('应该拒绝非字符串输入（反序列化）', () => {
@@ -126,13 +188,25 @@ describe('序列化工具', () => {
       const follower: Follower = {
         id: 'follower-1',
         name: '测试随从',
-        tags: ['test'],
-        baseStats: { attack: 2, hp: 3 },
+        description: '测试',
         level: 1,
+        baseAttack: 2,
+        baseHealth: 3,
+        equipmentSlots: 1,
+        imageUrl: 'test.png',
         effects: {
-          onDealDamage: [
+          onAttack: [
             (ctx) => {
-              ctx.damage += 1
+              return {
+                gameState: ctx.gameState,
+                events: [{
+                  type: 'damage',
+                  targets: [ctx.self],
+                  value: 1,
+                  damageType: 'physical',
+                  source: ctx.self
+                }]
+              }
             }
           ]
         }
@@ -144,45 +218,65 @@ describe('序列化工具', () => {
       expect(deserialized.id).toBe(follower.id)
       expect(deserialized.name).toBe(follower.name)
       expect(deserialized.effects).toBeDefined()
-      expect(deserialized.effects?.onDealDamage).toHaveLength(1)
+      expect(deserialized.effects?.onAttack).toHaveLength(1)
 
       // 测试反序列化后的效果函数是否正常工作
-      const mockCtx: EffectContext = {
-        sourceId: 'follower-1',
-        targetId: 'follower-2',
-        damage: 0,
-        healing: 0,
-        flags: []
-      }
+      const mockCtx = createMockContext()
 
-      if (deserialized.effects?.onDealDamage) {
-        deserialized.effects.onDealDamage[0](mockCtx)
+      if (deserialized.effects?.onAttack) {
+        const result = deserialized.effects.onAttack[0](mockCtx)
+        expect(result.events).toBeDefined()
+        expect(result.events?.[0].type).toBe('damage')
       }
-
-      expect(mockCtx.damage).toBe(1)
     })
 
     it('应该能够处理多个 TriggerTiming 的效果', () => {
       const follower: Follower = {
         id: 'follower-2',
         name: '多效果随从',
-        tags: ['test'],
-        baseStats: { attack: 2, hp: 3 },
+        description: '测试',
         level: 1,
+        baseAttack: 2,
+        baseHealth: 3,
+        equipmentSlots: 1,
+        imageUrl: 'test.png',
         effects: {
-          onDealDamage: [
+          onAttack: [
             (ctx) => {
-              ctx.damage += 1
+              return {
+                gameState: ctx.gameState,
+                events: [{
+                  type: 'damage',
+                  targets: [ctx.self],
+                  value: 1,
+                  damageType: 'physical',
+                  source: ctx.self
+                }]
+              }
             }
           ],
           onTakeDamage: [
             (ctx) => {
-              ctx.healing += 1
+              return {
+                gameState: ctx.gameState,
+                events: [{
+                  type: 'heal',
+                  targets: [ctx.self],
+                  value: 1
+                }]
+              }
             }
           ],
           onDeath: [
             (ctx) => {
-              ctx.flags.push('death-effect')
+              return {
+                gameState: ctx.gameState,
+                events: [{
+                  type: 'summon',
+                  followers: [ctx.self],
+                  positions: [{ side: 'ally', x: 0, y: 0 }]
+                }]
+              }
             }
           ]
         }
@@ -194,60 +288,61 @@ describe('序列化工具', () => {
       expect(Object.keys(deserialized.effects || {})).toHaveLength(3)
 
       // 测试每个效果
-      const mockCtx1: EffectContext = {
-        sourceId: 'follower-2',
-        targetId: 'follower-3',
-        damage: 0,
-        healing: 0,
-        flags: []
+      const mockCtx1 = createMockContext()
+
+      if (deserialized.effects?.onAttack) {
+        const result = deserialized.effects.onAttack[0](mockCtx1)
+        expect(result.events?.[0].type).toBe('damage')
       }
 
-      if (deserialized.effects?.onDealDamage) {
-        deserialized.effects.onDealDamage[0](mockCtx1)
-      }
-      expect(mockCtx1.damage).toBe(1)
-
-      const mockCtx2: EffectContext = {
-        sourceId: 'follower-3',
-        targetId: 'follower-2',
-        damage: 0,
-        healing: 0,
-        flags: []
-      }
+      const mockCtx2 = createMockContext()
 
       if (deserialized.effects?.onTakeDamage) {
-        deserialized.effects.onTakeDamage[0](mockCtx2)
+        const result = deserialized.effects.onTakeDamage[0](mockCtx2)
+        expect(result.events?.[0].type).toBe('heal')
       }
-      expect(mockCtx2.healing).toBe(1)
 
-      const mockCtx3: EffectContext = {
-        sourceId: 'follower-2',
-        targetId: 'follower-2',
-        damage: 0,
-        healing: 0,
-        flags: []
-      }
+      const mockCtx3 = createMockContext()
 
       if (deserialized.effects?.onDeath) {
-        deserialized.effects.onDeath[0](mockCtx3)
+        const result = deserialized.effects.onDeath[0](mockCtx3)
+        expect(result.events?.[0].type).toBe('summon')
       }
-      expect(mockCtx3.flags).toContain('death-effect')
     })
 
     it('应该能够处理同一个 Timing 有多个效果', () => {
       const follower: Follower = {
         id: 'follower-3',
         name: '多效果同timing随从',
-        tags: ['test'],
-        baseStats: { attack: 2, hp: 3 },
+        description: '测试',
         level: 1,
+        baseAttack: 2,
+        baseHealth: 3,
+        equipmentSlots: 1,
+        imageUrl: 'test.png',
         effects: {
-          onDealDamage: [
+          onAttack: [
             (ctx) => {
-              ctx.damage += 1
+              return {
+                gameState: ctx.gameState,
+                events: [{
+                  type: 'damage',
+                  targets: [ctx.self],
+                  value: 1,
+                  damageType: 'physical',
+                  source: ctx.self
+                }]
+              }
             },
             (ctx) => {
-              ctx.damage *= 2
+              return {
+                gameState: ctx.gameState,
+                events: [{
+                  type: 'heal',
+                  targets: [ctx.self],
+                  value: 1
+                }]
+              }
             }
           ]
         }
@@ -256,31 +351,29 @@ describe('序列化工具', () => {
       const serialized = serializeFollower(follower)
       const deserialized = deserializeFollower(serialized)
 
-      expect(deserialized.effects?.onDealDamage).toHaveLength(2)
+      expect(deserialized.effects?.onAttack).toHaveLength(2)
 
-      const mockCtx: EffectContext = {
-        sourceId: 'follower-3',
-        targetId: 'follower-4',
-        damage: 2,
-        healing: 0,
-        flags: []
+      const mockCtx = createMockContext()
+
+      if (deserialized.effects?.onAttack) {
+        const result1 = deserialized.effects.onAttack[0](mockCtx)
+        expect(result1.events?.[0].type).toBe('damage')
+
+        const result2 = deserialized.effects.onAttack[1](mockCtx)
+        expect(result2.events?.[0].type).toBe('heal')
       }
-
-      if (deserialized.effects?.onDealDamage) {
-        deserialized.effects.onDealDamage.forEach((effect) => effect(mockCtx))
-      }
-
-      // 初始 damage=2，第一个效果 +1 变成 3，第二个效果 *2 变成 6
-      expect(mockCtx.damage).toBe(6)
     })
 
     it('应该能够处理没有效果的随从', () => {
       const follower: Follower = {
         id: 'follower-4',
         name: '无效果随从',
-        tags: ['test'],
-        baseStats: { attack: 2, hp: 3 },
-        level: 1
+        description: '测试',
+        level: 1,
+        baseAttack: 2,
+        baseHealth: 3,
+        equipmentSlots: 1,
+        imageUrl: 'test.png'
       }
 
       const serialized = serializeFollower(follower)
@@ -295,11 +388,14 @@ describe('序列化工具', () => {
       const follower: Follower = {
         id: 'follower-5',
         name: '空effects随从',
-        tags: ['test'],
-        baseStats: { attack: 2, hp: 3 },
+        description: '测试',
         level: 1,
+        baseAttack: 2,
+        baseHealth: 3,
+        equipmentSlots: 1,
+        imageUrl: 'test.png',
         effects: {
-          onDealDamage: []
+          onAttack: []
         }
       }
 
@@ -307,20 +403,32 @@ describe('序列化工具', () => {
       const deserialized = deserializeFollower(serialized)
 
       // 空数组应该被保留
-      expect(deserialized.effects?.onDealDamage).toEqual([])
+      expect(deserialized.effects?.onAttack).toEqual([])
     })
 
     it('应该能够处理随从的其他属性', () => {
       const follower: Follower = {
         id: 'follower-6',
         name: '完整属性随从',
-        tags: ['test1', 'test2'],
-        baseStats: { attack: 5, hp: 10 },
+        description: '测试',
         level: 3,
+        baseAttack: 5,
+        baseHealth: 10,
+        equipmentSlots: 2,
+        imageUrl: 'test.png',
         effects: {
-          onDealDamage: [
+          onAttack: [
             (ctx) => {
-              ctx.damage += 1
+              return {
+                gameState: ctx.gameState,
+                events: [{
+                  type: 'damage',
+                  targets: [ctx.self],
+                  value: 1,
+                  damageType: 'physical',
+                  source: ctx.self
+                }]
+              }
             }
           ]
         }
@@ -331,9 +439,9 @@ describe('序列化工具', () => {
 
       expect(deserialized.id).toBe(follower.id)
       expect(deserialized.name).toBe(follower.name)
-      expect(deserialized.tags).toEqual(follower.tags)
-      expect(deserialized.baseStats).toEqual(follower.baseStats)
       expect(deserialized.level).toBe(follower.level)
+      expect(deserialized.baseAttack).toBe(follower.baseAttack)
+      expect(deserialized.baseHealth).toBe(follower.baseHealth)
     })
   })
 })

@@ -54,7 +54,7 @@ export function createNoUpdateInsertSchema<
 
 // 用户表
 export const users = pgTable('users', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  ...baseFields,
   username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
   hashedPassword: text('hashed_password').notNull(),
@@ -63,8 +63,6 @@ export const users = pgTable('users', {
   isActive: boolean('is_active').default(true),
   isAdmin: boolean('is_admin').default(false),
   lastLoginAt: timestamp('last_login_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
 // 用户关系
@@ -316,15 +314,15 @@ export const gameEvents = pgTable('game_events', {
 })
 
 // Zod 模式
+
+// users 表有特殊验证逻辑：需要额外 omit lastLoginAt
 export const insertUserSchema = createInsertSchema(users, {
   username: z.string().min(3).max(32),
   email: z.string().email(),
   displayName: z.string().min(1).max(64).optional(),
 })
   .omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
+    ...standardOmit,
     lastLoginAt: true,
   })
   .extend({

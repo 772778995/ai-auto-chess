@@ -1,4 +1,4 @@
-// 数据模块导出
+// 卡牌数据导出
 export * from './followers'
-export * from './equipment/index'
+export * from './equipment'
 export * from './spells'

@@ -23,6 +23,35 @@ export const idField = {
   id: uuid('id').primaryKey().defaultRandom(),
 }
 
+// ===== Zod Schema 辅助函数 =====
+
+// 标准的 omit 字段（id + timestamps）
+export const standardOmit = {
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+} as const
+
+// 仅 omit id 和 createdAt（无 updatedAt 的表）
+export const noUpdateOmit = {
+  id: true,
+  createdAt: true,
+} as const
+
+// 创建标准的 insert schema（自动 omit id + timestamps）
+export function createStandardInsertSchema<
+  TTable extends Parameters<typeof createInsertSchema>[0]
+>(table: TTable, extend?: Record<string, z.ZodTypeAny>) {
+  return createInsertSchema(table, extend as any).omit(standardOmit as any)
+}
+
+// 创建仅 omit id + createdAt 的 insert schema
+export function createNoUpdateInsertSchema<
+  TTable extends Parameters<typeof createInsertSchema>[0]
+>(table: TTable, extend?: Record<string, z.ZodTypeAny>) {
+  return createInsertSchema(table, extend as any).omit(noUpdateOmit as any)
+}
+
 // 用户表
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),

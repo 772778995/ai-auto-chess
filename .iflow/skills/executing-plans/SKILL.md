@@ -84,7 +84,20 @@ Task 工具 (subagent_type="code-reviewer"):
 - 执行下一批次
 - 重复直到完成
 
-### 步骤 6：完成开发
+### 步骤 6：更新路线图状态
+
+**在进入完成开发流程之前，必须先更新路线图状态：**
+
+1. 更新 `docs/roadmap/README.md` 中的任务状态为 ✅ 已完成
+2. 如果计划有对应的设计文档和实现计划，添加文档链接
+
+```markdown
+| 任务名 | ✅ | docs/design/YYYY-MM-DD-任务名-design.md | docs/plans/YYYY-MM-DD-任务名-plan.md |
+```
+
+**注意：** 这确保路线图始终与实际执行状态同步，避免"计划已完成但路线图显示未开始"的问题。
+
+### 步骤 7：完成开发
 
 在所有任务完成并验证后：
 - 宣布："我正在使用 finishing-a-development-branch 技能来完成这项工作。"
@@ -176,7 +189,7 @@ Task 工具 (subagent_type="code-reviewer"):
 **必需的工作流技能：**
 - **superpowers:using-git-worktrees** - 必需：步骤 0 设置隔离工作区
 - **superpowers:writing-plans** - 创建此技能执行的计划
-- **superpowers:finishing-a-development-branch** - 所有任务完成后完成开发（步骤 6）
+- **superpowers:finishing-a-development-branch** - 所有任务完成后完成开发（步骤 7）
 
 **审查机制：**
 - 步骤 4 直接派遣 `code-reviewer` agent（subagent_type="code-reviewer"）

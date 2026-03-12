@@ -153,29 +153,25 @@ git worktree remove <worktree-path>
 
 **对于选项 3：** 保留工作树。
 
-### 步骤 6：更新 roadmap 状态
+### 步骤 6：清理工作树
 
-**对于选项 1（本地合并）和选项 2（创建 PR）：**
+**对于选项 1、2、4：**
 
-在 `docs/roadmap/README.md` 中更新任务状态：
-
-```markdown
-| 任务名 | ✅ | docs/design/YYYY-MM-DD-任务名-design.md | docs/roadmap/YYYY-MM-DD-任务名.md |
+检查是否在工作树中：
+```bash
+git worktree list | grep $(git branch --show-current)
 ```
 
-**对于选项 3（保持原样）：**
-
-Roadmap 状态保持 🔄 进行中。设计文档和实现计划保留。用户稍后需要手动处理。
-
-**对于选项 4（丢弃）：**
-
-将任务状态回退为 ⬜ 待开始，清除文档链接：
-
-```markdown
-| 任务名 | ⬜ | - | - |
+如果是：
+```bash
+git worktree remove <worktree-path>
 ```
 
-**注意：** 选项 4 丢弃时，设计文档和实现计划文件是否删除由用户决定。
+**对于选项 3：** 保留工作树。
+
+---
+
+**路线图状态已在 executing-plans 技能步骤 6 中更新。**
 
 状态符号：
 - ⬜ 待开始
@@ -235,7 +231,7 @@ roadmap (完成) ← finishing-a-development-branch ←─────┘
 
 **被以下调用：**
 - **subagent-driven-development**（最后一步）- 所有任务完成后
-- **executing-plans**（步骤 6）- 所有批次完成后
+- **executing-plans**（步骤 7）- 所有批次完成后
 
 **配对使用：**
 - **using-git-worktrees** - 清理该技能创建的工作树

@@ -23,6 +23,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   gameSessions: many(gameSessions),
   playerStats: many(playerStats),
   gameSaves: many(gameSaves),
+  campaignStats: many(campaignStats),
 }))
 
 // 游戏会话表
@@ -201,6 +202,59 @@ export const gameSavesRelations = relations(gameSaves, ({ one }) => ({
   }),
 }))
 
+// 闯关战绩统计表
+export const campaignStats = pgTable('campaign_stats', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id).notNull(),
+
+  // 游戏标识
+  saveId: uuid('save_id').references(() => gameSaves.id), // 关联存档（可选）
+  difficulty: text('difficulty').notNull(),
+
+  // 结果
+  victory: boolean('victory').notNull(),
+  clearedLevel: integer('cleared_level').notNull(), // 到达第几关
+
+  // 详细统计
+  totalBattles: integer('total_battles').default(0).notNull(),
+  totalWins: integer('total_wins').default(0).notNull(),
+  totalLosses: integer('total_losses').default(0).notNull(),
+
+  // 经济统计
+  totalGoldEarned: integer('total_gold_earned').default(0).notNull(),
+  totalGoldSpent: integer('total_gold_spent').default(0).notNull(),
+
+  // 战斗统计
+  totalDamageDealt: integer('total_damage_dealt').default(0).notNull(),
+  totalDamageTaken: integer('total_damage_taken').default(0).notNull(),
+  totalKills: integer('total_kills').default(0).notNull(),
+
+  // 卡牌统计
+  followersRecruited: integer('followers_recruited').default(0).notNull(),
+  equipmentAcquired: integer('equipment_acquired').default(0).notNull(),
+  spellsCast: integer('spells_cast').default(0).notNull(),
+
+  // 时间统计
+  playTimeSeconds: integer('play_time_seconds').default(0).notNull(),
+  startedAt: timestamp('started_at').notNull(),
+  finishedAt: timestamp('finished_at'),
+
+  // 元数据
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+// 战绩统计关系
+export const campaignStatsRelations = relations(campaignStats, ({ one }) => ({
+  user: one(users, {
+    fields: [campaignStats.userId],
+    references: [users.id],
+  }),
+  save: one(gameSaves, {
+    fields: [campaignStats.saveId],
+    references: [gameSaves.id],
+  }),
+}))
+
 // 游戏事件表
 export const gameEvents = pgTable('game_events', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -269,6 +323,14 @@ export const insertGameSaveSchema = createInsertSchema(gameSaves).omit({
 
 export const selectGameSaveSchema = createSelectSchema(gameSaves)
 
+export const insertCampaignStatsSchema = createInsertSchema(campaignStats).omit({
+  id: true,
+  createdAt: true,
+  finishedAt: true,
+})
+
+export const selectCampaignStatsSchema = createSelectSchema(campaignStats)
+
 // 导出的类型
 export type User = typeof users.$inferSelect
 export type InsertUser = typeof users.$inferInsert
@@ -284,3 +346,5 @@ export type PlayerProgress = typeof playerProgress.$inferSelect
 export type InsertPlayerProgress = typeof playerProgress.$inferInsert
 export type GameSave = typeof gameSaves.$inferSelect
 export type InsertGameSave = typeof gameSaves.$inferInsert
+export type CampaignStat = typeof campaignStats.$inferSelect
+export type InsertCampaignStat = typeof campaignStats.$inferInsert

@@ -1,4 +1,5 @@
 export * from './diff'
+export * from './effects'
 export * from './follower'
 export * from './msgpack'
 export * from './serialization'

@@ -12,14 +12,15 @@ export interface BattlePosition {
 // ===== 触发时机 =====
 
 export type TriggerTiming =
-  | 'onEnter'       // 入场
-  | 'onGrowth'      // 成长
-  | 'onFirstStrike' // 先手
-  | 'onAttack'      // 攻击后
-  | 'onHit'         // 受击
-  | 'onKill'        // 击杀
-  | 'onDeath'       // 死亡（遗言）
-  | 'onRoundEnd'    // 回合结束（准备）
+  | 'onEnter'        // 入场
+  | 'onGrowth'       // 成长
+  | 'onFirstStrike'  // 先手
+  | 'onAttack'       // 攻击时
+  | 'onTakeDamage'   // 受伤时
+  | 'onHit'          // 受伤后
+  | 'onKill'         // 击杀
+  | 'onDeath'        // 死亡（遗言）
+  | 'onRoundEnd'     // 回合结束（准备）
 
 // ===== 状态项 =====
 
@@ -34,7 +35,8 @@ export interface StatusItem {
 // ===== 效果系统 =====
 
 // 效果函数（前置声明，避免循环引用）
-export type EffectFunction = (ctx: EffectContext) => unknown
+// 返回值：EffectResult（新格式）或 unknown（旧格式，向后兼容）
+export type EffectFunction = (ctx: EffectContext) => EffectResult | unknown
 
 // 效果定义 - 只有函数，描述由 Follower.description 统一提供
 export type EffectDefinition = EffectFunction
@@ -66,6 +68,48 @@ export interface EffectGameEvent {
   source?: FollowerInstance
   target?: FollowerInstance
   value?: number
+}
+
+// ===== 游戏事件 =====
+
+export type DamageType = 'physical' | 'magical' | 'true'
+
+// 伤害事件
+export interface DamageEvent {
+  type: 'damage'
+  targets: FollowerInstance[]
+  value: number
+  damageType: DamageType
+  source?: FollowerInstance
+}
+
+// 治疗事件
+export interface HealEvent {
+  type: 'heal'
+  targets: FollowerInstance[]
+  value: number
+}
+
+// 召唤事件
+export interface SummonEvent {
+  type: 'summon'
+  followers: FollowerInstance[]
+  positions: BattlePosition[]
+}
+
+// 死亡事件
+export interface DeathEvent {
+  type: 'death'
+  follower: FollowerInstance
+}
+
+// 游戏事件联合类型
+export type FollowerGameEvent = DamageEvent | HealEvent | SummonEvent | DeathEvent
+
+// 效果返回值
+export interface EffectResult {
+  gameState: unknown
+  events?: FollowerGameEvent[]
 }
 
 // ===== 随从模板 =====
@@ -109,7 +153,7 @@ export const battlePositionSchema = z.object({
 })
 
 export const triggerTimingSchema = z.enum([
-  'onEnter', 'onGrowth', 'onFirstStrike', 'onAttack',
+  'onEnter', 'onGrowth', 'onFirstStrike', 'onAttack', 'onTakeDamage',
   'onHit', 'onKill', 'onDeath', 'onRoundEnd'
 ])
 

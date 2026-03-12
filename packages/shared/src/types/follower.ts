@@ -112,13 +112,34 @@ export interface EffectResult {
   events?: FollowerGameEvent[]
 }
 
+// ===== 装备类型 =====
+
+// 装备属性加成
+export interface EquipmentBonuses {
+  attack?: number
+  health?: number
+  shield?: number
+  damageBonus?: number
+}
+
+// 装备模板
+export interface Equipment {
+  id: string
+  name: string
+  description: string
+  level: 2 | 3 | 4 | 5 | 6
+  bonuses: EquipmentBonuses
+  effects: Partial<Record<TriggerTiming, ((ctx: EffectContext) => EffectResult)[]>>
+  imageUrl: string
+}
+
 // ===== 随从模板 =====
 
 export interface Follower {
   id: string
   name: string
   description: string
-  level: 1 | 2 | 3 | 4 | 5 | 6
+  level: 1 | 2 | 3 | 4 | 5 | 6 | 7  // 7 为精英随从
   baseAttack: number
   baseHealth: number
   effects?: Partial<Record<TriggerTiming, EffectDefinition[]>>
@@ -171,7 +192,7 @@ export const followerSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
-  level: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5), z.literal(6)]),
+  level: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5), z.literal(6), z.literal(7)]),
   baseAttack: z.number(),
   baseHealth: z.number(),
   effects: z.record(z.any()).optional(),

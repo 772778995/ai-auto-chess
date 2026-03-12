@@ -122,7 +122,7 @@ export interface Follower {
   level: 1 | 2 | 3 | 4 | 5 | 6
   baseAttack: number
   baseHealth: number
-  effects: Partial<Record<TriggerTiming, EffectDefinition[]>>
+  effects?: Partial<Record<TriggerTiming, EffectDefinition[]>>
   equipmentSlots: number
   imageUrl: string
 }

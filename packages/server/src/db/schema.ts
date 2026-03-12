@@ -247,7 +247,7 @@ export const gameSavesRelations = relations(gameSaves, ({ one }) => ({
 
 // 闯关战绩统计表
 export const campaignStats = pgTable('campaign_stats', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  ...baseFieldsNoUpdate, // 无 updatedAt
   userId: uuid('user_id').references(() => users.id).notNull(),
 
   // 游戏标识
@@ -281,9 +281,6 @@ export const campaignStats = pgTable('campaign_stats', {
   playTimeSeconds: integer('play_time_seconds').default(0).notNull(),
   startedAt: timestamp('started_at').notNull(),
   finishedAt: timestamp('finished_at'),
-
-  // 元数据
-  createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
 // 战绩统计关系
@@ -362,11 +359,8 @@ export const insertGameSaveSchema = createInsertSchema(gameSaves).omit({
 
 export const selectGameSaveSchema = createSelectSchema(gameSaves)
 
-export const insertCampaignStatsSchema = createInsertSchema(campaignStats).omit({
-  id: true,
-  createdAt: true,
-  finishedAt: true,
-})
+export const insertCampaignStatsSchema = createInsertSchema(campaignStats)
+  .omit({ ...noUpdateOmit, finishedAt: true })
 
 export const selectCampaignStatsSchema = createSelectSchema(campaignStats)
 

@@ -36,17 +36,11 @@ export interface StatusItem {
 // 效果函数（前置声明，避免循环引用）
 export type EffectFunction = (ctx: EffectContext) => unknown
 
-// 效果定义
-export interface EffectDefinition {
-  description: string
-  execute: EffectFunction
-}
+// 效果定义 - 只有函数，描述由 Follower.description 统一提供
+export type EffectDefinition = EffectFunction
 
 // 序列化效果
-export interface SerializedEffect {
-  description: string
-  execute: string
-}
+export type SerializedEffect = string
 
 // 效果上下文
 export interface EffectContext {
@@ -90,7 +84,7 @@ export interface Follower {
 
 // 序列化随从
 export interface SerializedFollower extends Omit<Follower, 'effects'> {
-  effects: Partial<Record<TriggerTiming, SerializedEffect>>
+  effects: Partial<Record<TriggerTiming, string>>
 }
 
 // ===== 随从实例 =====
@@ -125,11 +119,6 @@ export const statusItemSchema = z.object({
   shield: z.number().optional(),
   permanent: z.boolean(),
   source: z.string()
-})
-
-export const serializedEffectSchema = z.object({
-  description: z.string(),
-  execute: z.string()
 })
 
 export const followerSchema = z.object({

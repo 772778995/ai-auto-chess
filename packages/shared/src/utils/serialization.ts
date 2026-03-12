@@ -3,29 +3,21 @@ import type {
   Follower,
   SerializedFollower,
   EffectDefinition,
-  SerializedEffect,
-  TriggerTiming,
-  EffectFunction
+  TriggerTiming
 } from '../types/follower'
 
 /**
- * 序列化效果定义
+ * 序列化效果函数
  */
-export function serializeEffect(effect: EffectDefinition): SerializedEffect {
-  return {
-    description: effect.description,
-    execute: effect.execute.toString()
-  }
+export function serializeEffect(effect: EffectDefinition): string {
+  return effect.toString()
 }
 
 /**
- * 反序列化效果定义
+ * 反序列化效果函数
  */
-export function deserializeEffect(serialized: SerializedEffect): EffectDefinition {
-  return {
-    description: serialized.description,
-    execute: new Function('ctx', `return (${serialized.execute})(ctx)`) as EffectFunction
-  }
+export function deserializeEffect(serialized: string): EffectDefinition {
+  return new Function('ctx', `return (${serialized})(ctx)`) as EffectDefinition
 }
 
 /**

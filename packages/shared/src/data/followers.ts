@@ -9,7 +9,7 @@ export const FOLLOWERS: Record<string, Follower> = {
   'F001': {
     id: 'F001',
     name: '小狼',
-    description: '基础攻击型',
+    description: '',
     level: 1,
     baseAttack: 2,
     baseHealth: 1,
@@ -26,18 +26,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onKill: {
-        description: '击杀后永久获得+1/+1',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 1, health: 1, permanent: true, source: '击杀效果' })
-          }
-          return newState
+      onKill: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 1, health: 1, permanent: true, source: '击杀效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -52,16 +49,13 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 1,
     effects: {
-      onEnter: {
-        description: '入场时对随机敌人造成2点伤害',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const target = ctx.tools.getRandomEnemy(newState, ctx.self.position)
-          if (target) {
-            target.currentHealth -= 2
-          }
-          return newState
+      onEnter: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const target = ctx.tools.getRandomEnemy(newState, ctx.self.position)
+        if (target) {
+          target.currentHealth -= 2
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -71,7 +65,7 @@ export const FOLLOWERS: Record<string, Follower> = {
   'F004': {
     id: 'F004',
     name: '铁皮猪',
-    description: '基础防御型',
+    description: '',
     level: 1,
     baseAttack: 1,
     baseHealth: 3,
@@ -88,18 +82,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onEnter: {
-        description: '入场时获得1层护盾',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
-          }
-          return newState
+      onEnter: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -126,18 +117,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
-      onGrowth: {
-        description: '成长时永久获得+1/+1',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 1, health: 1, permanent: true, source: '成长效果' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 1, health: 1, permanent: true, source: '成长效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -152,18 +140,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onGrowth: {
-        description: '成长时永久获得+1攻击',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 1, permanent: true, source: '成长效果' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 1, permanent: true, source: '成长效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -178,12 +163,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onDeath: {
-        description: '死亡时召唤1/1蜘蛛',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onDeath: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -198,12 +180,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
-      onDeath: {
-        description: '死亡时召唤2个1/1史莱姆',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onDeath: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -218,12 +197,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
-      onEnter: {
-        description: '入场时获得随机随从',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现发现逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 实现发现逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -247,7 +223,7 @@ export const FOLLOWERS: Record<string, Follower> = {
   'F013': {
     id: 'F013',
     name: '剑客',
-    description: '高攻击力',
+    description: '',
     level: 2,
     baseAttack: 3,
     baseHealth: 2,
@@ -264,12 +240,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 1,
     effects: {
-      onEnter: {
-        description: '入场时获得疯狂（攻击次数+1）',
-        execute: (ctx: EffectContext) => {
-          // TODO: 疯狂是静态属性，需要在 FollowerInstance 中标记
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 疯狂是静态属性，需要在 FollowerInstance 中标记
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -284,18 +257,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onFirstStrike: {
-        description: '先手时获得+2攻击（临时）',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 2, permanent: false, source: '先手效果' })
-          }
-          return newState
+      onFirstStrike: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 2, permanent: false, source: '先手效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -322,18 +292,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 3,
     effects: {
-      onEnter: {
-        description: '入场时获得护盾',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
-          }
-          return newState
+      onEnter: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -348,18 +315,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onGrowth: {
-        description: '成长时永久获得+2/+1',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 2, health: 1, permanent: true, source: '成长效果' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 2, health: 1, permanent: true, source: '成长效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -374,18 +338,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 1,
     effects: {
-      onGrowth: {
-        description: '成长时永久获得+2攻击',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 2, permanent: true, source: '成长效果' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 2, permanent: true, source: '成长效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -400,12 +361,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onDeath: {
-        description: '死亡时召唤2/2亡灵',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onDeath: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -420,12 +378,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 3,
     effects: {
-      onDeath: {
-        description: '死亡时召唤2个1/1稻草人',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onDeath: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -466,18 +421,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 3,
     effects: {
-      onKill: {
-        description: '击杀后永久获得+1/+1',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 1, health: 1, permanent: true, source: '击杀效果' })
-          }
-          return newState
+      onKill: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 1, health: 1, permanent: true, source: '击杀效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -492,11 +444,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 3,
     effects: {
-      onEnter: {
-        description: '入场时获得疯狂（攻击次数+1）',
-        execute: (ctx: EffectContext) => {
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -523,12 +472,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
-      onEnter: {
-        description: '入场时为同列随从提供+1/+1光环',
-        execute: (ctx: EffectContext) => {
-          // TODO: 光环效果需要特殊处理
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 光环效果需要特殊处理
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -543,18 +489,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
-      onGrowth: {
-        description: '成长时永久获得+2/+2',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 2, health: 2, permanent: true, source: '成长效果' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 2, health: 2, permanent: true, source: '成长效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -569,12 +512,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 0,
     baseHealth: 3,
     effects: {
-      onGrowth: {
-        description: '成长时变成更强大的随从',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现变形逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onGrowth: (ctx: EffectContext) => {
+        // TODO: 实现变形逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -589,12 +529,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 3,
     effects: {
-      onDeath: {
-        description: '死亡时召唤3/3亡魂',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onDeath: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -609,12 +546,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onGrowth: {
-        description: '成长时召唤1/1番茄',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onGrowth: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -629,12 +563,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onEnter: {
-        description: '入场时获得随机随从',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现发现逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 实现发现逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -649,12 +580,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 3,
     effects: {
-      onEnter: {
-        description: '入场时使成长效果×2',
-        execute: (ctx: EffectContext) => {
-          // TODO: 光环效果需要特殊处理
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 光环效果需要特殊处理
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -671,18 +599,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 6,
     baseHealth: 4,
     effects: {
-      onFirstStrike: {
-        description: '先手时获得+3/+3（临时）',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 3, health: 3, permanent: false, source: '先手效果' })
-          }
-          return newState
+      onFirstStrike: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 3, health: 3, permanent: false, source: '先手效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -697,16 +622,13 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
-      onKill: {
-        description: '击杀后对随机敌人造成2点伤害',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const target = ctx.tools.getRandomEnemy(newState, ctx.self.position)
-          if (target) {
-            target.currentHealth -= 2
-          }
-          return newState
+      onKill: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const target = ctx.tools.getRandomEnemy(newState, ctx.self.position)
+        if (target) {
+          target.currentHealth -= 2
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -721,19 +643,16 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 5,
     effects: {
-      onEnter: {
-        description: '入场时获得护盾',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
-            self.taunt = true
-          }
-          return newState
+      onEnter: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
+          self.taunt = true
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -760,18 +679,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 5,
     effects: {
-      onGrowth: {
-        description: '成长时永久获得+3/+3',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 3, health: 3, permanent: true, source: '成长效果' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 3, health: 3, permanent: true, source: '成长效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -786,18 +702,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
-      onGrowth: {
-        description: '成长时永久获得+4攻击',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 4, permanent: true, source: '成长效果' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 4, permanent: true, source: '成长效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -812,12 +725,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
-      onDeath: {
-        description: '死亡时召唤4/4骨龙',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onDeath: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -832,12 +742,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 3,
     effects: {
-      onEnter: {
-        description: '入场时使召唤物+1/+1',
-        execute: (ctx: EffectContext) => {
-          // TODO: 光环效果需要特殊处理
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 光环效果需要特殊处理
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -852,12 +759,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 4,
     effects: {
-      onEnter: {
-        description: '入场时使先手效果×2',
-        execute: (ctx: EffectContext) => {
-          // TODO: 光环效果需要特殊处理
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 光环效果需要特殊处理
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -872,12 +776,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
-      onRoundEnd: {
-        description: '回合结束时获得2金币',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现金币逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onRoundEnd: (ctx: EffectContext) => {
+        // TODO: 实现金币逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -894,18 +795,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 8,
     baseHealth: 5,
     effects: {
-      onFirstStrike: {
-        description: '先手时获得+5/+5（临时）',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 5, health: 5, permanent: false, source: '先手效果' })
-          }
-          return newState
+      onFirstStrike: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 5, health: 5, permanent: false, source: '先手效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -920,12 +818,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 5,
     effects: {
-      onKill: {
-        description: '击杀后消灭目标',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现消灭逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onKill: (ctx: EffectContext) => {
+        // TODO: 实现消灭逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -940,19 +835,16 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 10,
     effects: {
-      onEnter: {
-        description: '入场时获得护盾',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
-            self.taunt = true
-          }
-          return newState
+      onEnter: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
+          self.taunt = true
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -967,12 +859,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 8,
     effects: {
-      onEnter: {
-        description: '入场时为所有友方随从提供+2/+2光环',
-        execute: (ctx: EffectContext) => {
-          // TODO: 光环效果需要特殊处理
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 光环效果需要特殊处理
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -987,18 +876,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 6,
     effects: {
-      onGrowth: {
-        description: '成长时永久获得+4/+4',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 4, health: 4, permanent: true, source: '成长效果' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 4, health: 4, permanent: true, source: '成长效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -1013,19 +899,16 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 5,
     effects: {
-      onGrowth: {
-        description: '成长时满血复活',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.currentHealth = self.baseHealth + 
-              self.statusList.reduce((sum, s) => sum + (s.health ?? 0), 0)
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.currentHealth = self.baseHealth + 
+            self.statusList.reduce((sum, s) => sum + (s.health ?? 0), 0)
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -1040,12 +923,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 6,
     effects: {
-      onEnter: {
-        description: '入场时召唤本局死亡的所有随从',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -1060,12 +940,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
-      onDeath: {
-        description: '死亡时召唤5/5虚空兽',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onDeath: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -1080,16 +957,13 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 5,
     effects: {
-      onFirstStrike: {
-        description: '先手时所有友方随从获得+2/+2（临时）',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const allies = ctx.tools.getAllAllies(newState)
-          for (const ally of allies) {
-            ally.statusList.push({ attack: 2, health: 2, permanent: false, source: '先手效果' })
-          }
-          return newState
+      onFirstStrike: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const allies = ctx.tools.getAllAllies(newState)
+        for (const ally of allies) {
+          ally.statusList.push({ attack: 2, health: 2, permanent: false, source: '先手效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -1104,12 +978,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 5,
     effects: {
-      onEnter: {
-        description: '入场时发现3张5星随从',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现发现逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 实现发现逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -1126,18 +997,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 10,
     baseHealth: 8,
     effects: {
-      onFirstStrike: {
-        description: '先手时获得+8/+8（临时）',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 8, health: 8, permanent: false, source: '先手效果' })
-          }
-          return newState
+      onFirstStrike: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 8, health: 8, permanent: false, source: '先手效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -1147,7 +1015,7 @@ export const FOLLOWERS: Record<string, Follower> = {
   'F055': {
     id: 'F055',
     name: '死亡之翼',
-    description: '最高攻击',
+    description: '',
     level: 6,
     baseAttack: 12,
     baseHealth: 6,
@@ -1164,19 +1032,16 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 15,
     effects: {
-      onEnter: {
-        description: '入场时获得2层护盾',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ shield: 2, permanent: true, source: '入场护盾' })
-            self.taunt = true
-          }
-          return newState
+      onEnter: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ shield: 2, permanent: true, source: '入场护盾' })
+          self.taunt = true
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -1191,18 +1056,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 12,
     effects: {
-      onHit: {
-        description: '受击时获得+1生命上限',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ health: 1, permanent: true, source: '受击效果' })
-          }
-          return newState
+      onHit: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ health: 1, permanent: true, source: '受击效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -1217,18 +1079,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 8,
     effects: {
-      onGrowth: {
-        description: '成长时永久获得+5/+5',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
-            (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
-          )
-          if (self) {
-            self.statusList.push({ attack: 5, health: 5, permanent: true, source: '成长效果' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
+          (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
+        )
+        if (self) {
+          self.statusList.push({ attack: 5, health: 5, permanent: true, source: '成长效果' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -1243,16 +1102,13 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 6,
     baseHealth: 6,
     effects: {
-      onGrowth: {
-        description: '成长时所有友方随从永久获得+1/+1',
-        execute: (ctx: EffectContext) => {
-          const newState = ctx.tools.cloneDeep(ctx.gameState)
-          const allies = ctx.tools.getAllAllies(newState)
-          for (const ally of allies) {
-            ally.statusList.push({ attack: 1, health: 1, permanent: true, source: '时间巨龙成长' })
-          }
-          return newState
+      onGrowth: (ctx: EffectContext) => {
+        const newState = ctx.tools.cloneDeep(ctx.gameState)
+        const allies = ctx.tools.getAllAllies(newState)
+        for (const ally of allies) {
+          ally.statusList.push({ attack: 1, health: 1, permanent: true, source: '时间巨龙成长' })
         }
+        return newState
       }
     },
     equipmentSlots: 2,
@@ -1267,12 +1123,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 6,
     baseHealth: 7,
     effects: {
-      onEnter: {
-        description: '入场时填满战场6/6士兵',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onEnter: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -1287,12 +1140,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 6,
     effects: {
-      onDeath: {
-        description: '死亡时召唤6/6天使和恶魔',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现召唤逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onDeath: (ctx: EffectContext) => {
+        // TODO: 实现召唤逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -1307,12 +1157,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 6,
     effects: {
-      onGrowth: {
-        description: '成长时发现1张随从',
-        execute: (ctx: EffectContext) => {
-          // TODO: 实现发现逻辑
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onGrowth: (ctx: EffectContext) => {
+        // TODO: 实现发现逻辑
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,
@@ -1327,12 +1174,9 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 5,
     effects: {
-      onFirstStrike: {
-        description: '拼点时获得+3攻击加成',
-        execute: (ctx: EffectContext) => {
-          // TODO: 拼点效果需要特殊处理
-          return ctx.tools.cloneDeep(ctx.gameState)
-        }
+      onFirstStrike: (ctx: EffectContext) => {
+        // TODO: 拼点效果需要特殊处理
+        return ctx.tools.cloneDeep(ctx.gameState)
       }
     },
     equipmentSlots: 2,

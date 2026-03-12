@@ -9,15 +9,17 @@ export function getCurrentStats(follower: FollowerInstance) {
     (acc, s) => ({
       attack: acc.attack + (s.attack ?? 0),
       health: acc.health + (s.health ?? 0),
-      shield: acc.shield + (s.shield ?? 0)
+      shield: acc.shield + (s.shield ?? 0),
+      damageBonus: acc.damageBonus + (s.damageBonus ?? 0)
     }),
-    { attack: 0, health: 0, shield: 0 }
+    { attack: 0, health: 0, shield: 0, damageBonus: 0 }
   )
 
   return {
     attack: follower.baseAttack + statusTotal.attack,
     maxHealth: follower.baseHealth + statusTotal.health,
     shield: statusTotal.shield,
+    damageBonus: statusTotal.damageBonus,
     currentHealth: follower.currentHealth
   }
 }

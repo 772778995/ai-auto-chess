@@ -9,7 +9,7 @@ import { getCurrentStats } from './follower'
 
 /**
  * 默认攻击效果
- * 对随机敌人造成等同于攻击力的物理伤害
+ * 对随机敌人造成等同于攻击力+增伤的物理伤害
  */
 export function defaultOnAttack(ctx: EffectContext): EffectResult {
   const stats = getCurrentStats(ctx.self)
@@ -19,12 +19,15 @@ export function defaultOnAttack(ctx: EffectContext): EffectResult {
     return { gameState: ctx.gameState }
   }
   
+  // 计算最终伤害 = 攻击力 + 增伤
+  const finalDamage = stats.attack + stats.damageBonus
+  
   return {
     gameState: ctx.gameState,
     events: [{
       type: 'damage',
       targets: [target],
-      value: stats.attack,
+      value: finalDamage,
       damageType: 'physical',
       source: ctx.self
     }] as DamageEvent[]

@@ -110,6 +110,66 @@ describe('defaultOnAttack', () => {
     
     expect(result.events).toBeUndefined()
   })
+  
+  it('应计算增伤效果', () => {
+    const attacker: FollowerInstance = {
+      instanceId: 'attacker-1',
+      id: 'F001',
+      name: '小狼',
+      description: '',
+      level: 1,
+      baseAttack: 5,
+      baseHealth: 3,
+      ownerId: 'player-a',
+      position: { side: 'ally', x: 0, y: 0 },
+      currentHealth: 3,
+      statusList: [{ damageBonus: 3, permanent: true, source: '装备' }],
+      equipment: [],
+      equipmentSlots: 2,
+      imageUrl: ''
+    }
+    
+    const target: FollowerInstance = {
+      instanceId: 'target-1',
+      id: 'F002',
+      name: '敌人',
+      description: '',
+      level: 1,
+      baseAttack: 2,
+      baseHealth: 10,
+      ownerId: 'player-b',
+      position: { side: 'enemy', x: 0, y: 0 },
+      currentHealth: 10,
+      statusList: [],
+      equipment: [],
+      equipmentSlots: 2,
+      imageUrl: ''
+    }
+    
+    const gameState = {
+      allies: [attacker],
+      enemies: [target]
+    }
+    
+    const ctx: EffectContext = {
+      gameState,
+      self: attacker,
+      tools: {
+        cloneDeep: <T>(obj: T) => JSON.parse(JSON.stringify(obj)),
+        getRandomEnemy: () => target,
+        getRandomAlly: () => null,
+        getAllAllies: () => [attacker],
+        getAllEnemies: () => [target],
+        getColumnAllies: () => []
+      }
+    }
+    
+    const result = defaultOnAttack(ctx)
+    
+    expect(result.events).toBeDefined()
+    const damageEvent = result.events![0] as DamageEvent
+    expect(damageEvent.value).toBe(8) // 5 攻击 + 3 增伤
+  })
 })
 
 describe('defaultOnTakeDamage', () => {

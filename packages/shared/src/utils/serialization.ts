@@ -29,9 +29,9 @@ export function serializeFollower(follower: Follower): SerializedFollower {
     effects: {}
   }
   
-  for (const [trigger, effect] of Object.entries(follower.effects)) {
-    if (effect) {
-      serialized.effects[trigger as TriggerTiming] = serializeEffect(effect)
+  for (const [trigger, effects] of Object.entries(follower.effects)) {
+    if (effects && Array.isArray(effects)) {
+      serialized.effects[trigger as TriggerTiming] = effects.map(serializeEffect)
     }
   }
   
@@ -47,9 +47,9 @@ export function deserializeFollower(serialized: SerializedFollower): Follower {
     effects: {}
   }
   
-  for (const [trigger, effect] of Object.entries(serialized.effects)) {
-    if (effect) {
-      follower.effects[trigger as TriggerTiming] = deserializeEffect(effect)
+  for (const [trigger, effects] of Object.entries(serialized.effects)) {
+    if (effects && Array.isArray(effects)) {
+      follower.effects[trigger as TriggerTiming] = effects.map(deserializeEffect)
     }
   }
   

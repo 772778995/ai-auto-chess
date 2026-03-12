@@ -28,6 +28,7 @@ export interface StatusItem {
   attack?: number      // 攻击力加成
   health?: number      // 生命上限加成
   shield?: number      // 护盾层数
+  damageBonus?: number // 增伤：攻击伤害额外增加
   permanent: boolean   // 是否永久保留
   source: string       // 来源描述
 }
@@ -121,14 +122,14 @@ export interface Follower {
   level: 1 | 2 | 3 | 4 | 5 | 6
   baseAttack: number
   baseHealth: number
-  effects: Partial<Record<TriggerTiming, EffectDefinition>>
+  effects: Partial<Record<TriggerTiming, EffectDefinition[]>>
   equipmentSlots: number
   imageUrl: string
 }
 
 // 序列化随从
 export interface SerializedFollower extends Omit<Follower, 'effects'> {
-  effects: Partial<Record<TriggerTiming, string>>
+  effects: Partial<Record<TriggerTiming, string[]>>
 }
 
 // ===== 随从实例 =====
@@ -142,6 +143,7 @@ export interface FollowerInstance extends Omit<Follower, 'effects'> {
   equipment: string[]
   // 静态属性
   taunt?: boolean
+  windfury?: boolean  // 疯狂：攻击次数+1
 }
 
 // ===== Zod 模式 =====
@@ -161,6 +163,7 @@ export const statusItemSchema = z.object({
   attack: z.number().optional(),
   health: z.number().optional(),
   shield: z.number().optional(),
+  damageBonus: z.number().optional(),
   permanent: z.boolean(),
   source: z.string()
 })
@@ -184,7 +187,8 @@ export const followerInstanceSchema = followerSchema.extend({
   currentHealth: z.number(),
   statusList: z.array(statusItemSchema),
   equipment: z.array(z.string()),
-  taunt: z.boolean().optional()
+  taunt: z.boolean().optional(),
+  windfury: z.boolean().optional()
 })
 
 // ===== 类型导出 =====

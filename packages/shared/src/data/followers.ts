@@ -15,7 +15,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 1,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f001.png'
@@ -29,8 +29,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack,
-      onKill: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onKill: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -39,7 +39,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 1, health: 1, permanent: true, source: '击杀效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f002.png'
@@ -53,15 +53,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 1,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const target = ctx.tools.getRandomEnemy(newState, ctx.self.position)
         if (target) {
           target.currentHealth -= 2
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f003.png'
@@ -75,7 +75,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 3,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f004.png'
@@ -89,8 +89,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -99,7 +99,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f005.png'
@@ -113,7 +113,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 0,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f006.png'
@@ -127,8 +127,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -137,7 +137,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 1, health: 1, permanent: true, source: '成长效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f007.png'
@@ -151,8 +151,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -161,7 +161,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 1, permanent: true, source: '成长效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f008.png'
@@ -175,11 +175,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack,
-      onDeath: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f009.png'
@@ -193,11 +193,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
-      onAttack: defaultOnAttack,
-      onDeath: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f010.png'
@@ -211,11 +211,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 实现发现逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f011.png'
@@ -229,7 +229,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 1,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f012.png'
@@ -245,7 +245,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f013.png'
@@ -259,11 +259,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 1,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 疯狂是静态属性，需要在 FollowerInstance 中标记
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f014.png'
@@ -277,8 +277,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack,
-      onFirstStrike: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onFirstStrike: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -287,7 +287,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 2, permanent: false, source: '先手效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f015.png'
@@ -301,7 +301,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f016.png'
@@ -315,8 +315,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 3,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -325,7 +325,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f017.png'
@@ -339,8 +339,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -349,7 +349,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 2, health: 1, permanent: true, source: '成长效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f018.png'
@@ -363,8 +363,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 1,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -373,7 +373,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 2, permanent: true, source: '成长效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f019.png'
@@ -387,11 +387,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack,
-      onDeath: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f020.png'
@@ -405,11 +405,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 3,
     effects: {
-      onAttack: defaultOnAttack,
-      onDeath: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f021.png'
@@ -423,7 +423,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f022.png'
@@ -437,7 +437,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f023.png'
@@ -453,8 +453,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 3,
     effects: {
-      onAttack: defaultOnAttack,
-      onKill: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onKill: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -463,7 +463,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 1, health: 1, permanent: true, source: '击杀效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f024.png'
@@ -477,10 +477,10 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 3,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f025.png'
@@ -494,7 +494,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 6,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f026.png'
@@ -508,11 +508,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f027.png'
@@ -526,8 +526,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -536,7 +536,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 2, health: 2, permanent: true, source: '成长效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f028.png'
@@ -550,11 +550,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 0,
     baseHealth: 3,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         // TODO: 实现变形逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f029.png'
@@ -568,11 +568,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 3,
     effects: {
-      onAttack: defaultOnAttack,
-      onDeath: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f030.png'
@@ -586,11 +586,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f031.png'
@@ -604,11 +604,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 2,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 实现发现逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f032.png'
@@ -622,11 +622,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 1,
     baseHealth: 3,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f033.png'
@@ -642,8 +642,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 6,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack,
-      onFirstStrike: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onFirstStrike: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -652,7 +652,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 3, health: 3, permanent: false, source: '先手效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f034.png'
@@ -666,15 +666,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack,
-      onKill: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onKill: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const target = ctx.tools.getRandomEnemy(newState, ctx.self.position)
         if (target) {
           target.currentHealth -= 2
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f035.png'
@@ -688,8 +688,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 5,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -699,7 +699,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.taunt = true
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f036.png'
@@ -713,7 +713,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 8,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f037.png'
@@ -727,8 +727,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 5,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -737,7 +737,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 3, health: 3, permanent: true, source: '成长效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f038.png'
@@ -751,8 +751,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -761,7 +761,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 4, permanent: true, source: '成长效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f039.png'
@@ -775,11 +775,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack,
-      onDeath: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f040.png'
@@ -793,11 +793,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 3,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f041.png'
@@ -811,11 +811,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f042.png'
@@ -829,11 +829,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 2,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack,
-      onRoundEnd: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onRoundEnd: [(ctx: EffectContext) => {
         // TODO: 实现金币逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f043.png'
@@ -849,8 +849,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 8,
     baseHealth: 5,
     effects: {
-      onAttack: defaultOnAttack,
-      onFirstStrike: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onFirstStrike: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -859,7 +859,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 5, health: 5, permanent: false, source: '先手效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f044.png'
@@ -873,11 +873,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 5,
     effects: {
-      onAttack: defaultOnAttack,
-      onKill: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onKill: [(ctx: EffectContext) => {
         // TODO: 实现消灭逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f045.png'
@@ -891,8 +891,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 10,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -902,7 +902,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.taunt = true
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f046.png'
@@ -916,11 +916,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 8,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 光环效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f047.png'
@@ -934,8 +934,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 6,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -944,7 +944,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 4, health: 4, permanent: true, source: '成长效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f048.png'
@@ -958,8 +958,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 5,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -969,7 +969,7 @@ export const FOLLOWERS: Record<string, Follower> = {
             self.statusList.reduce((sum, s) => sum + (s.health ?? 0), 0)
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f049.png'
@@ -983,11 +983,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 6,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f050.png'
@@ -1001,11 +1001,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 4,
     effects: {
-      onAttack: defaultOnAttack,
-      onDeath: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f051.png'
@@ -1019,15 +1019,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 5,
     effects: {
-      onAttack: defaultOnAttack,
-      onFirstStrike: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onFirstStrike: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const allies = ctx.tools.getAllAllies(newState)
         for (const ally of allies) {
           ally.statusList.push({ attack: 2, health: 2, permanent: false, source: '先手效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f052.png'
@@ -1041,11 +1041,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 5,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 实现发现逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f053.png'
@@ -1061,8 +1061,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 10,
     baseHealth: 8,
     effects: {
-      onAttack: defaultOnAttack,
-      onFirstStrike: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onFirstStrike: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -1071,7 +1071,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 8, health: 8, permanent: false, source: '先手效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f054.png'
@@ -1085,7 +1085,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 12,
     baseHealth: 6,
     effects: {
-      onAttack: defaultOnAttack
+      onAttack: [defaultOnAttack]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f055.png'
@@ -1099,8 +1099,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 15,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -1110,7 +1110,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.taunt = true
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f056.png'
@@ -1124,8 +1124,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 3,
     baseHealth: 12,
     effects: {
-      onAttack: defaultOnAttack,
-      onHit: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onHit: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -1134,7 +1134,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ health: 1, permanent: true, source: '受击效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f057.png'
@@ -1148,8 +1148,8 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 8,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const self = (newState as { allies?: FollowerInstance[] }).allies?.find(
           (f: FollowerInstance) => f.instanceId === ctx.self.instanceId
@@ -1158,7 +1158,7 @@ export const FOLLOWERS: Record<string, Follower> = {
           self.statusList.push({ attack: 5, health: 5, permanent: true, source: '成长效果' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f058.png'
@@ -1172,15 +1172,15 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 6,
     baseHealth: 6,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
         const allies = ctx.tools.getAllAllies(newState)
         for (const ally of allies) {
           ally.statusList.push({ attack: 1, health: 1, permanent: true, source: '时间巨龙成长' })
         }
         return newState
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f059.png'
@@ -1194,11 +1194,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 6,
     baseHealth: 7,
     effects: {
-      onAttack: defaultOnAttack,
-      onEnter: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onEnter: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f060.png'
@@ -1212,11 +1212,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 6,
     effects: {
-      onAttack: defaultOnAttack,
-      onDeath: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f061.png'
@@ -1230,11 +1230,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 6,
     effects: {
-      onAttack: defaultOnAttack,
-      onGrowth: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onGrowth: [(ctx: EffectContext) => {
         // TODO: 实现发现逻辑
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f062.png'
@@ -1248,11 +1248,11 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 5,
     baseHealth: 5,
     effects: {
-      onAttack: defaultOnAttack,
-      onFirstStrike: (ctx: EffectContext) => {
+      onAttack: [defaultOnAttack],
+      onFirstStrike: [(ctx: EffectContext) => {
         // TODO: 拼点效果需要特殊处理
         return ctx.tools.cloneDeep(ctx.gameState)
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/f063.png'
@@ -1268,7 +1268,7 @@ export const FOLLOWERS: Record<string, Follower> = {
     baseAttack: 4,
     baseHealth: 6,
     effects: {
-      onAttack: (ctx: EffectContext): EffectResult => {
+      onAttack: [(ctx: EffectContext): EffectResult => {
         const newState = ctx.tools.cloneDeep(ctx.gameState)
 
         // 找到空位置
@@ -1315,7 +1315,7 @@ export const FOLLOWERS: Record<string, Follower> = {
             positions: [emptyPosition]
           }]
         }
-      }
+      }]
     },
     equipmentSlots: 2,
     imageUrl: '/assets/followers/undead_king.png'

@@ -178,7 +178,7 @@ export const playerStatsRelations = relations(playerStats, ({ one }) => ({
 
 // 玩家闯关进度表
 export const playerProgress = pgTable('player_progress', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  ...baseFields,
   userId: uuid('user_id').references(() => users.id).notNull().unique(),
 
   // 关卡解锁进度
@@ -187,10 +187,6 @@ export const playerProgress = pgTable('player_progress', {
 
   // 难度解锁
   unlockedDifficulties: text('unlocked_difficulties').array().default(['normal']).notNull(),
-
-  // 元数据
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
 // 玩家进度关系
@@ -354,11 +350,7 @@ export const insertRoomPlayerSchema = createInsertSchema(roomPlayers).omit({
   leftAt: true,
 })
 
-export const insertPlayerProgressSchema = createInsertSchema(playerProgress).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-})
+export const insertPlayerProgressSchema = createStandardInsertSchema(playerProgress)
 
 export const selectPlayerProgressSchema = createSelectSchema(playerProgress)
 

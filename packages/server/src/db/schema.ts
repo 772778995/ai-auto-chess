@@ -199,7 +199,7 @@ export const playerProgressRelations = relations(playerProgress, ({ one }) => ({
 
 // 游戏存档表（单机闯关进行中的游戏）
 export const gameSaves = pgTable('game_saves', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  ...baseFieldsNoUpdate, // 使用无 updatedAt 的版本
   userId: uuid('user_id').references(() => users.id).notNull(),
 
   // 存档基本信息
@@ -355,7 +355,7 @@ export const insertPlayerProgressSchema = createStandardInsertSchema(playerProgr
 export const selectPlayerProgressSchema = createSelectSchema(playerProgress)
 
 export const insertGameSaveSchema = createInsertSchema(gameSaves).omit({
-  id: true,
+  ...noUpdateOmit,
   startTime: true,
   lastSaveTime: true,
 })

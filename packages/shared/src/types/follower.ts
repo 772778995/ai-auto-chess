@@ -36,8 +36,7 @@ export interface StatusItem {
 // ===== 效果系统 =====
 
 // 效果函数（前置声明，避免循环引用）
-// 返回值：EffectResult（新格式）或 unknown（旧格式，向后兼容）
-export type EffectFunction = (ctx: EffectContext) => EffectResult | unknown
+export type EffectFunction = (ctx: EffectContext) => EffectResult
 
 // 效果定义 - 只有函数，描述由 Follower.description 统一提供
 export type EffectDefinition = EffectFunction

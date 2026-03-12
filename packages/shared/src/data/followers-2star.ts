@@ -28,7 +28,7 @@ export const FOLLOWERS_2STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onEnter: [(ctx: EffectContext) => {
         // TODO: 疯狂是静态属性，需要在 FollowerInstance 中标记
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,
@@ -52,7 +52,7 @@ export const FOLLOWERS_2STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ attack: 2, permanent: false, source: '先手效果' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -90,7 +90,7 @@ export const FOLLOWERS_2STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -114,7 +114,7 @@ export const FOLLOWERS_2STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ attack: 2, health: 1, permanent: true, source: '成长效果' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -138,7 +138,7 @@ export const FOLLOWERS_2STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ attack: 2, permanent: true, source: '成长效果' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -156,7 +156,7 @@ export const FOLLOWERS_2STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,
@@ -174,7 +174,7 @@ export const FOLLOWERS_2STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,

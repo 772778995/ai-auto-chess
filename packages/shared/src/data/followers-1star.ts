@@ -34,7 +34,7 @@ export const FOLLOWERS_1STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ attack: 1, health: 1, permanent: true, source: '击杀效果' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -56,7 +56,7 @@ export const FOLLOWERS_1STAR: Record<string, Follower> = {
         if (target) {
           target.currentHealth -= 2
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -94,7 +94,7 @@ export const FOLLOWERS_1STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ shield: 1, permanent: true, source: '入场护盾' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -132,7 +132,7 @@ export const FOLLOWERS_1STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ attack: 1, health: 1, permanent: true, source: '成长效果' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -156,7 +156,7 @@ export const FOLLOWERS_1STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ attack: 1, permanent: true, source: '成长效果' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -174,7 +174,7 @@ export const FOLLOWERS_1STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,
@@ -192,7 +192,7 @@ export const FOLLOWERS_1STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,
@@ -210,7 +210,7 @@ export const FOLLOWERS_1STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onEnter: [(ctx: EffectContext) => {
         // TODO: 实现发现逻辑
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,

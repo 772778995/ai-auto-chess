@@ -20,7 +20,7 @@ export const FOLLOWERS_6STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ attack: 8, health: 8, permanent: false, source: '先手效果' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -59,7 +59,7 @@ export const FOLLOWERS_6STAR: Record<string, Follower> = {
           self.statusList.push({ shield: 2, permanent: true, source: '入场护盾' })
           self.taunt = true
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -83,7 +83,7 @@ export const FOLLOWERS_6STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ health: 1, permanent: true, source: '受击效果' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -107,7 +107,7 @@ export const FOLLOWERS_6STAR: Record<string, Follower> = {
         if (self) {
           self.statusList.push({ attack: 5, health: 5, permanent: true, source: '成长效果' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -129,7 +129,7 @@ export const FOLLOWERS_6STAR: Record<string, Follower> = {
         for (const ally of allies) {
           ally.statusList.push({ attack: 1, health: 1, permanent: true, source: '时间巨龙成长' })
         }
-        return newState
+        return { gameState: newState }
       }]
     },
     equipmentSlots: 2,
@@ -147,7 +147,7 @@ export const FOLLOWERS_6STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onEnter: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,
@@ -165,7 +165,7 @@ export const FOLLOWERS_6STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onDeath: [(ctx: EffectContext) => {
         // TODO: 实现召唤逻辑
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,
@@ -183,7 +183,7 @@ export const FOLLOWERS_6STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onGrowth: [(ctx: EffectContext) => {
         // TODO: 实现发现逻辑
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,
@@ -201,7 +201,7 @@ export const FOLLOWERS_6STAR: Record<string, Follower> = {
       onAttack: [defaultOnAttack],
       onFirstStrike: [(ctx: EffectContext) => {
         // TODO: 拼点效果需要特殊处理
-        return ctx.tools.cloneDeep(ctx.gameState)
+        return { gameState: ctx.tools.cloneDeep(ctx.gameState) }
       }]
     },
     equipmentSlots: 2,

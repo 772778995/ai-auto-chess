@@ -1,4 +1,5 @@
 // 游戏常量
+export * from './shop'
 
 // 网络常量
 export const NETWORK = {

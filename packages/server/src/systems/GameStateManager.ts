@@ -5,7 +5,7 @@ import type { CombatSubPhase } from './StateMachine'
 export type GamePhase = 'lobby' | 'hero_select' | 'recruit' | 'combat' | 'settlement' | 'ended'
 
 export interface ShopSlot {
-  type: 'follower' | 'equipment' | 'spell' | 'null'
+  type: 'follower' | 'equipment' | 'spell'
   cardId: string
   isLocked: boolean
   discount: number
@@ -199,6 +199,174 @@ export class GameStateManager {
   async updateSubPhase(gameId: string, subPhase: CombatSubPhase): Promise<void> {
     await this.redis.json.set(`game:${gameId}`, '.subPhase', subPhase)
     await this.updateTimestamp(gameId)
+  }
+
+  // ========== ShopSystem 所需方法 ==========
+
+  /**
+   * 获取玩家状态
+   */
+  async getPlayerState(gameId: string, playerId: string): Promise<PlayerState | null> {
+    const result = await this.redis.json.get(`game:${gameId}`, `.players.${playerId}`)
+    return result as PlayerState | null
+  }
+
+  /**
+   * 更新玩家商店经验
+   */
+  async updatePlayerShopExp(
+    gameId: string,
+    playerId: string,
+    delta: number
+  ): Promise<number> {
+    const result = await this.redis.json.numIncrBy(
+      `game:${gameId}`,
+      `.players.${playerId}.shopExp`,
+      delta
+    )
+    await this.updateTimestamp(gameId)
+    return result as number
+  }
+
+  /**
+   * 更新玩家商店等级和经验
+   */
+  async updatePlayerShopLevel(
+    gameId: string,
+    playerId: string,
+    newLevel: number,
+    newExp: number
+  ): Promise<void> {
+    await this.redis.json.set(`game:${gameId}`, `.players.${playerId}.shopLevel`, newLevel)
+    await this.redis.json.set(`game:${gameId}`, `.players.${playerId}.shopExp`, newExp)
+    await this.updateTimestamp(gameId)
+  }
+
+  /**
+   * 更新玩家商店槽位
+   */
+  async updatePlayerShop(
+    gameId: string,
+    playerId: string,
+    shop: (ShopSlot | null)[]
+  ): Promise<void> {
+    await this.redis.json.set(`game:${gameId}`, `.players.${playerId}.shop`, shop)
+    await this.updateTimestamp(gameId)
+  }
+
+  /**
+   * 设置商店锁定状态
+   */
+  async setShopLocked(gameId: string, playerId: string, locked: boolean): Promise<void> {
+    await this.redis.json.set(`game:${gameId}`, `.players.${playerId}.shopLocked`, locked)
+    await this.updateTimestamp(gameId)
+  }
+
+  /**
+   * 添加卡牌到手牌
+   */
+  async addCardToHand(
+    gameId: string,
+    playerId: string,
+    cardInstanceId: string,
+    type: 'follower' | 'equipment' | 'spell'
+  ): Promise<void> {
+    const cardData = {
+      id: cardInstanceId,
+      type,
+      addedAt: Date.now(),
+    }
+
+    const currentHand = (await this.redis.json.get(
+      `game:${gameId}`,
+      `.players.${playerId}.hand`
+    )) as unknown[] | null
+
+    const newHand = currentHand ? [...currentHand, cardData] : [cardData]
+    await this.redis.json.set(`game:${gameId}`, `.players.${playerId}.hand`, newHand)
+    await this.updateTimestamp(gameId)
+  }
+
+  /**
+   * 添加咒术到手牌
+   */
+  async addSpellToHand(gameId: string, playerId: string, spellId: string): Promise<void> {
+    const spellData = {
+      id: spellId,
+      type: 'spell',
+      addedAt: Date.now(),
+    }
+
+    const currentHand = (await this.redis.json.get(
+      `game:${gameId}`,
+      `.players.${playerId}.hand`
+    )) as unknown[] | null
+
+    const newHand = currentHand ? [...currentHand, spellData] : [spellData]
+    await this.redis.json.set(`game:${gameId}`, `.players.${playerId}.hand`, newHand)
+    await this.updateTimestamp(gameId)
+  }
+
+  /**
+   * 从手牌移除卡牌
+   */
+  async removeCardFromHand(
+    gameId: string,
+    playerId: string,
+    cardInstanceId: string
+  ): Promise<boolean> {
+    const currentHand = (await this.redis.json.get(
+      `game:${gameId}`,
+      `.players.${playerId}.hand`
+    )) as Array<{ id: string }> | null
+
+    if (!currentHand) {
+      return false
+    }
+
+    const newHand = currentHand.filter((card) => card.id !== cardInstanceId)
+
+    if (newHand.length === currentHand.length) {
+      return false // 没有找到卡牌
+    }
+
+    await this.redis.json.set(`game:${gameId}`, `.players.${playerId}.hand`, newHand)
+    await this.updateTimestamp(gameId)
+    return true
+  }
+
+  /**
+   * 从战场移除卡牌
+   */
+  async removeCardFromBattlefield(
+    gameId: string,
+    playerId: string,
+    cardInstanceId: string
+  ): Promise<boolean> {
+    const currentBattlefield = (await this.redis.json.get(
+      `game:${gameId}`,
+      `.players.${playerId}.battlefield`
+    )) as Array<{ id: string } | null> | null
+
+    if (!currentBattlefield) {
+      return false
+    }
+
+    const newBattlefield = currentBattlefield.map((card) =>
+      card?.id === cardInstanceId ? null : card
+    )
+
+    const removed = newBattlefield.some((card, index) =>
+      card === null && currentBattlefield[index] !== null
+    )
+
+    if (!removed) {
+      return false
+    }
+
+    await this.redis.json.set(`game:${gameId}`, `.players.${playerId}.battlefield`, newBattlefield)
+    await this.updateTimestamp(gameId)
+    return true
   }
 
   private async updateTimestamp(gameId: string): Promise<void> {

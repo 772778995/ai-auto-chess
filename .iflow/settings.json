@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c \"IS_WORKTREE=$(git rev-parse --git-dir 2>/dev/null | grep -c '\\.worktrees' || echo 0); WORKTREE_LIST=$(git worktree list 2>/dev/null | tail -n +2); if [ \\\"$IS_WORKTREE\\\" = '0' ]; then echo '[WORKTREE-GATE] ❌ 当前不在 worktree 中。'; echo '[WORKTREE-GATE] 必须先调用 superpowers:using-git-worktrees 创建隔离工作区，才能进行任何实现操作。'; echo '[WORKTREE-GATE] 直接在主分支上实现代码 = 违反工作流，立即停止。'; else echo '[WORKTREE-GATE] ✅ 当前在 worktree 中，可以进行实现。'; fi; echo '[WORKTREE-GATE] 现有 worktrees:'; git worktree list 2>/dev/null\"",
+            "command": "bash -c \"IS_WORKTREE=$(git rev-parse --git-dir 2>/dev/null | grep -c '\\.worktrees' || echo 0); WORKTREE_LIST=$(git worktree list 2>/dev/null | tail -n +2); if [ \\\"$IS_WORKTREE\\\" = '0' ]; then echo '[WORKTREE-GATE] ❌ 当前不在 worktree 中。'; echo '[WORKTREE-GATE] 必须先调用 using-git-worktrees 创建隔离工作区，才能进行任何实现操作。'; echo '[WORKTREE-GATE] 直接在主分支上实现代码 = 违反工作流，立即停止。'; else echo '[WORKTREE-GATE] ✅ 当前在 worktree 中，可以进行实现。'; fi; echo '[WORKTREE-GATE] 现有 worktrees:'; git worktree list 2>/dev/null\"",
             "timeout": 10,
             "async": false
           },

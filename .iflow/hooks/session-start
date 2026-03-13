@@ -22,7 +22,7 @@ escape_for_json() {
 }
 
 using_superpowers_escaped=$(escape_for_json "$using_superpowers_content")
-session_context="<EXTREMELY_IMPORTANT>\n你拥有超能力。\n\n**以下是你的 'superpowers:using-superpowers' 技能的完整内容——你使用技能的入门指南。对于所有其他技能，使用 'Skill' 工具：**\n\n${using_superpowers_escaped}\n</EXTREMELY_IMPORTANT>"
+session_context="<EXTREMELY_IMPORTANT>\n你拥有超能力。\n\n**以下是你的 'using-superpowers' 技能的完整内容——你使用技能的入门指南。对于所有其他技能，使用 'Skill' 工具：**\n\n${using_superpowers_escaped}\n</EXTREMELY_IMPORTANT>"
 
 # 以 JSON 格式输出上下文注入
 cat <<EOF

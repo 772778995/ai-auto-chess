@@ -161,7 +161,7 @@ Task 工具 (subagent_type="planner"):
     ## 设计摘要
     [将设计文档的核心内容直接粘贴在这里，不要让子代理自己读文件]
 
-    请调用 superpowers:writing-plans 技能，将设计拆解为精确的 TDD
+    请调用 writing-plans 技能，将设计拆解为精确的 TDD
     任务序列，保存到 docs/plans/，并提供执行方式选择。
 ```
 
@@ -170,7 +170,7 @@ Task 工具 (subagent_type="planner"):
 - 直接调用 skill → 使用当前主模型，GLM-5 不参与
 
 **不要：**
-- 直接调用 superpowers:writing-plans skill（主模型执行，模型不切换）
+- 直接调用 writing-plans skill（主模型执行，模型不切换）
 - 调用 frontend-design、mcp-builder 或任何其他实现技能
 
 ## 关键原则

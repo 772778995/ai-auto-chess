@@ -3,12 +3,12 @@ description: 执行已有的实现计划。读取 docs/plans/ 中的计划文件
 disable-model-invocation: true
 ---
 
-调用 superpowers:executing-plans 技能并完全按照其呈现的内容执行。
+调用 executing-plans 技能并完全按照其呈现的内容执行。
 
 **执行前检查：**
 1. 确认 docs/plans/ 中存在计划文件
 2. 如果 PreImplementation hook 输出 `[WORKTREE-GATE] ❌`，
-   先调用 superpowers:using-git-worktrees 创建隔离工作区
+   先调用 using-git-worktrees 创建隔离工作区
 3. 执行过程中，所有代码实现通过 implementer 子代理完成，
    批次审查通过 code-reviewer 子代理完成
 

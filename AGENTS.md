@@ -18,21 +18,21 @@
 
 ### 关键规则
 
-| 修改项 | 说明 |
-|--------|------|
-| 横屏布局 | 3×2 战场站位 |
+| 修改项   | 说明                             |
+| -------- | -------------------------------- |
+| 横屏布局 | 3×2 战场站位                    |
 | 标签系统 | 使用 `tags[]` 数组替代种族系统 |
-| 拼点机制 | 战斗前拼点决定先攻权 |
+| 拼点机制 | 战斗前拼点决定先攻权             |
 
 ---
 
 ## 技术栈
 
-| 层级 | 技术 |
-|------|------|
-| 前端 | Vue 3 + Phaser 3 + Pinia + UnoCSS + Vite |
-| 后端 | Hono.js + Bun + PostgreSQL + WebSocket |
-| 共享 | TypeScript + Zod + msgpackr + jsondiffpatch |
+| 层级 | 技术                                                       |
+| ---- | ---------------------------------------------------------- |
+| 前端 | Vue 3 + Phaser 3 + Pinia + UnoCSS + Vite                   |
+| 后端 | Hono.js + Bun + PostgreSQL + Redis + RedisJSON + WebSocket |
+| 共享 | TypeScript + Zod + msgpackr + jsondiffpatch                |
 
 ---
 
@@ -123,8 +123,8 @@ shared → server / web（可并行）
 
 **在做任何涉及游戏系统的开发之前，必须先阅读对应的设计文档。**
 
-| 系统 | 必须阅读的文档 |
-|------|----------------|
+| 系统     | 必须阅读的文档                                |
+| -------- | --------------------------------------------- |
 | 词条系统 | `docs/design/2026-02-24-词条系统-design.md` |
 | 经济系统 | `docs/design/2026-02-24-经济系统-design.md` |
 | 战斗系统 | `docs/design/2026-02-24-战斗系统-design.md` |
@@ -165,32 +165,32 @@ brainstorming → writing-plans → subagent-driven-development / executing-plan
 
 ### 模型分工（子代理）
 
-| 角色 | Agent | 模型 |
-|------|-------|------|
-| 头脑风暴 | brainstormer | Kimi K2.5 |
-| 写计划 | planner | GLM-5 |
-| 写代码 | implementer | MiniMax M2.5 |
-| 规范审查 | spec-reviewer | GLM-5 |
+| 角色     | Agent                 | 模型         |
+| -------- | --------------------- | ------------ |
+| 头脑风暴 | brainstormer          | Kimi K2.5    |
+| 写计划   | planner               | GLM-5        |
+| 写代码   | implementer           | MiniMax M2.5 |
+| 规范审查 | spec-reviewer         | GLM-5        |
 | 质量审查 | code-quality-reviewer | MiniMax M2.5 |
-| 代码审查 | code-reviewer | MiniMax M2.5 |
+| 代码审查 | code-reviewer         | MiniMax M2.5 |
 
 ### 常用技能
 
-| 技能 | 触发条件 |
-|------|----------|
-| `brainstorming` | 创建功能前 |
-| `writing-plans` | 有功能规格需要实现 |
+| 技能                            | 触发条件           |
+| ------------------------------- | ------------------ |
+| `brainstorming`               | 创建功能前         |
+| `writing-plans`               | 有功能规格需要实现 |
 | `subagent-driven-development` | 在当前会话执行计划 |
-| `executing-plans` | 在新会话执行计划 |
-| `systematic-debugging` | 遇到 bug |
+| `executing-plans`             | 在新会话执行计划   |
+| `systematic-debugging`        | 遇到 bug           |
 
 ### 文档规范
 
-| 类型 | 位置 | 命名格式 |
-|------|------|----------|
-| 设计文档 | `docs/design/` | `YYYY-MM-DD-<主题>-design.md` |
-| 实现计划 | `docs/plans/` | `YYYY-MM-DD-<序号>-<任务名>-plan.md` |
-| 路线图 | `docs/roadmap/` | `README.md` + 层级目录 |
+| 类型     | 位置              | 命名格式                               |
+| -------- | ----------------- | -------------------------------------- |
+| 设计文档 | `docs/design/`  | `YYYY-MM-DD-<主题>-design.md`        |
+| 实现计划 | `docs/plans/`   | `YYYY-MM-DD-<序号>-<任务名>-plan.md` |
+| 路线图   | `docs/roadmap/` | `README.md` + 层级目录               |
 
 ---
 
@@ -228,15 +228,15 @@ brainstorming → writing-plans → subagent-driven-development / executing-plan
 
 ### 核心系统文档速查
 
-| 系统 | 设计文档 |
-|------|----------|
+| 系统      | 设计文档                          |
+| --------- | --------------------------------- |
 | 经济/商店 | `2026-02-24-经济系统-design.md` |
-| 战斗 | `2026-02-24-战斗系统-design.md` |
-| 随从 | `2026-02-24-随从系统-design.md` |
-| 词条 | `2026-02-24-词条系统-design.md` |
-| 装备 | `2026-02-24-装备系统-design.md` |
-| 咒术 | `2026-02-24-咒术系统-design.md` |
-| 英雄 | `2026-02-24-英雄系统-design.md` |
+| 战斗      | `2026-02-24-战斗系统-design.md` |
+| 随从      | `2026-02-24-随从系统-design.md` |
+| 词条      | `2026-02-24-词条系统-design.md` |
+| 装备      | `2026-02-24-装备系统-design.md` |
+| 咒术      | `2026-02-24-咒术系统-design.md` |
+| 英雄      | `2026-02-24-英雄系统-design.md` |
 
 ---
 

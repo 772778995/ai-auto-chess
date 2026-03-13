@@ -167,7 +167,7 @@ Agent 3 修改文件：[E, F]
 - **executing-plans** — 批次中有 3+ 独立任务时强制触发
 
 **配对使用：**
-- **superpowers:using-git-worktrees** — 并行 agent 在同一 worktree 中工作
+- **using-git-worktrees** — 并行 agent 在同一 worktree 中工作
 - **code-reviewer** — 所有 agent 完成后整体审查
 
 ## 现实世界影响

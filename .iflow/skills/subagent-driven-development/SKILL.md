@@ -37,7 +37,7 @@ digraph when_to_use {
 </HARD-GATE>
 
 <HARD-GATE name="worktree-required">
-在派遣任何实现子代理之前，必须已通过 superpowers:using-git-worktrees 设置隔离工作区。
+在派遣任何实现子代理之前，必须已通过 using-git-worktrees 设置隔离工作区。
 未在 worktree 中开始实现 = 违规，无论理由是什么。
 </HARD-GATE>
 
@@ -131,5 +131,5 @@ digraph process {
 
 **必需技能：**
 
-- **superpowers:using-git-worktrees** — 开始前设置隔离工作区
-- **superpowers:finishing-a-development-branch** — 所有任务完成后
+- **using-git-worktrees** — 开始前设置隔离工作区
+- **finishing-a-development-branch** — 所有任务完成后

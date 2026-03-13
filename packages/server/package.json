@@ -21,15 +21,18 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
-    "ws": "^8.16.0",
-    "hono": "^4.4.7",
-    "@hono/node-server": "^1.11.4",
-    "zod": "^3.23.8",
-    "drizzle-orm": "^0.40.0",
-    "postgres": "^3.4.4",
-    "drizzle-zod": "^0.6.0",
     "@game/shared": "workspace:*",
-    "dotenv": "^16.4.5"
+    "@hono/node-server": "^1.11.4",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.40.0",
+    "drizzle-zod": "^0.6.0",
+    "hono": "^4.4.7",
+    "jsondiffpatch": "^0.7.3",
+    "msgpackr": "^1.11.9",
+    "postgres": "^3.4.4",
+    "redis": "^5.11.0",
+    "ws": "^8.16.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/ws": "^8.5.10",

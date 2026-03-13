@@ -2,7 +2,7 @@ import { WebSocket } from 'ws'
 import { IncomingMessage } from 'http'
 import { computeAndSerializeDiff } from '@game/shared'
 import { WsMessageType } from '@game/shared'
-import type { WsMessage, HandshakePayload, AuthPayload, PlayerInputPayload, GameState } from '@game/shared'
+import type { WsMessage, HandshakePayload, AuthPayload, PlayerInputPayload, LegacyGameState } from '@game/shared'
 
 // 连接状态
 interface ConnectionState {
@@ -21,7 +21,7 @@ interface GameRoom {
   id: string
   name: string
   players: Map<string, ConnectionState>
-  gameState: GameState
+  gameState: LegacyGameState
   lastTick: number
 }
 
@@ -304,7 +304,7 @@ function createGameRoom(): GameRoom {
 }
 
 // 创建初始游戏状态
-function createInitialGameState(): GameState {
+function createInitialGameState(): LegacyGameState {
   return {
     world: {
       id: 'world-1',
@@ -361,7 +361,7 @@ function startGameLoop(roomId: string) {
 }
 
 // 更新游戏状态（简化）
-function updateGameState(state: GameState, players: Map<string, ConnectionState>): GameState {
+function updateGameState(state: LegacyGameState, players: Map<string, ConnectionState>): LegacyGameState {
   // TODO: 实际游戏状态更新逻辑
   // 这里返回一个轻微修改的状态用于演示
   return {

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { gameStateSchema, type GameStateType } from './game'
+import { stateChangeSchema, type StateChange } from './command'
 
 // API 响应信封
 export type ApiResponse<T = any, E = string> = {
@@ -39,6 +40,51 @@ export enum WsMessageType {
   // 游戏事件
   GameEvent = 'game_event',
   ChatMessage = 'chat_message',
+
+  // 状态同步
+  StateDelta = 'state_delta',    // 增量同步
+  FullSync = 'full_sync',        // 全量同步
+  SyncRequest = 'sync_request',  // 同步请求
+}
+
+// ===== 状态同步消息类型 =====
+
+/**
+ * 状态增量消息
+ */
+export interface StateDeltaPayload {
+  gameId: string
+  fromVersion: number
+  toVersion: number
+  delta: unknown      // jsondiffpatch delta
+  changes: StateChange[]
+}
+
+/**
+ * 全量同步消息
+ */
+export interface FullSyncPayload {
+  gameId: string
+  version: number
+  state: GameStateType
+  reason: 'version_mismatch' | 'reconnect' | 'initial'
+}
+
+/**
+ * 同步请求消息
+ */
+export interface SyncRequestPayload {
+  gameId: string
+  clientVersion: number
+  playerId: string
+}
+
+/**
+ * 同步响应
+ */
+export interface SyncResponse {
+  type: 'delta' | 'full_sync'
+  payload: StateDeltaPayload | FullSyncPayload
 }
 
 // WebSocket 消息基类
@@ -181,6 +227,34 @@ export const gameEventSchema = z.object({
   data: z.record(z.any()),
 })
 
+// ===== 状态同步 Schemas =====
+
+export const stateDeltaPayloadSchema = z.object({
+  gameId: z.string(),
+  fromVersion: z.number().int().min(0),
+  toVersion: z.number().int().min(0),
+  delta: z.unknown(),
+  changes: z.array(stateChangeSchema),
+})
+
+export const fullSyncPayloadSchema = z.object({
+  gameId: z.string(),
+  version: z.number().int().min(0),
+  state: gameStateSchema,
+  reason: z.enum(['version_mismatch', 'reconnect', 'initial']),
+})
+
+export const syncRequestPayloadSchema = z.object({
+  gameId: z.string(),
+  clientVersion: z.number().int().min(0),
+  playerId: z.string(),
+})
+
+export const syncResponseSchema = z.object({
+  type: z.enum(['delta', 'full_sync']),
+  payload: z.union([stateDeltaPayloadSchema, fullSyncPayloadSchema]),
+})
+
 // 类型推断
 export type ApiResponseType = z.infer<typeof apiResponseSchema>
 export type PaginatedResponseType = z.infer<typeof paginatedResponseSchema>
@@ -194,3 +268,7 @@ export type GameStatePayloadType = z.infer<typeof gameStatePayloadSchema>
 export type PlayerInputType = z.infer<typeof playerInputSchema>
 export type PlayerInputPayloadType = z.infer<typeof playerInputPayloadSchema>
 export type GameEventType = z.infer<typeof gameEventSchema>
+export type StateDeltaPayloadType = z.infer<typeof stateDeltaPayloadSchema>
+export type FullSyncPayloadType = z.infer<typeof fullSyncPayloadSchema>
+export type SyncRequestPayloadType = z.infer<typeof syncRequestPayloadSchema>
+export type SyncResponseType = z.infer<typeof syncResponseSchema>

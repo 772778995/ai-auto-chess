@@ -64,7 +64,6 @@ export async function checkDatabaseHealth(): Promise<{
 }
 
 // 实用函数
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function transactional<T>(callback: (tx: any) => Promise<T>): Promise<T> {
   return await db.transaction(async (tx) => {
     return await callback(tx)

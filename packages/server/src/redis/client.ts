@@ -76,7 +76,6 @@ export function createRedisClient() {
     json: {
       async set(key: string, path: string, value: unknown) {
         const c = ensureClient()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return c.json.set(key, path, value as any)
       },
 
@@ -92,7 +91,6 @@ export function createRedisClient() {
 
       async arrAppend(key: string, path: string, ...values: unknown[]) {
         const c = ensureClient()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return c.json.arrAppend(key, path, values as any[])
       },
     },

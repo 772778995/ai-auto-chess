@@ -214,7 +214,6 @@ export class CommandExecutor {
   /**
    * 验证装备指令
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private validateEquip(_payload: unknown, _playerState: PlayerState): ValidationResult {
     // TODO: 实现装备验证逻辑
     return { valid: true }
@@ -223,7 +222,6 @@ export class CommandExecutor {
   /**
    * 验证使用咒术指令
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private validateUseSpell(_payload: unknown, _playerState: PlayerState): ValidationResult {
     // TODO: 实现咒术验证逻辑
     return { valid: true }

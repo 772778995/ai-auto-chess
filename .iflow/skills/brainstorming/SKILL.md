@@ -71,14 +71,13 @@ description: "在进行任何创造性工作之前必须使用——创建功能
 2. **确保输出目录存在**
    - 检查 `docs/design/` 目录，不存在则创建
    - 检查 `docs/roadmap/` 目录，不存在则创建
-   - 这是设计文档和实现计划的输出位置
 
 3. **探索项目上下文** — 检查文件、文档、最近提交
 4. **提出澄清问题** — 一次一个，理解目的/约束/成功标准
 5. **提出 2-3 种方法** — 包含权衡和你推荐的建议
 6. **呈现设计** — 按其复杂性缩放各部分，每个部分后获得用户批准
 7. **编写设计文档** — 保存到 `docs/design/YYYY-MM-DD-<主题>-design.md` 并提交
-8. **过渡到实现** — 调用 writing-plans 技能创建实现计划
+8. **过渡到实现** — 见下方"设计之后"
 
 ## 流程图
 
@@ -96,8 +95,8 @@ digraph brainstorming {
     "提出 2-3 种方法" [shape=box];
     "呈现设计部分" [shape=box];
     "用户批准设计？" [shape=diamond];
-    "编写设计文档" [shape=box];
-    "调用 writing-plans 技能" [shape=doublecircle];
+    "编写设计文档并提交" [shape=box];
+    "派遣 planner 子代理" [shape=doublecircle style=filled fillcolor=orange];
 
     "确定任务来源" -> "roadmap 存在？";
     "roadmap 存在？" -> "询问是否创建 roadmap" [label="否"];
@@ -113,12 +112,10 @@ digraph brainstorming {
     "提出 2-3 种方法" -> "呈现设计部分";
     "呈现设计部分" -> "用户批准设计？";
     "用户批准设计？" -> "呈现设计部分" [label="否，修改"];
-    "用户批准设计？" -> "编写设计文档" [label="是"];
-    "编写设计文档" -> "调用 writing-plans 技能";
+    "用户批准设计？" -> "编写设计文档并提交" [label="是"];
+    "编写设计文档并提交" -> "派遣 planner 子代理";
 }
 ```
-
-**最终状态是调用 writing-plans。** 不要调用 frontend-design、mcp-builder 或任何其他实现技能。头脑风暴后你调用的唯一技能是 writing-plans。
 
 ## 流程
 
@@ -146,12 +143,35 @@ digraph brainstorming {
 **文档化：**
 - 确保输出目录存在：检查并创建 `docs/design/`
 - 将验证的设计写入 `docs/design/YYYY-MM-DD-<主题>-design.md`
-- 如果可用，使用 elements-of-style:writing-clearly-and-concisely 技能
 - 将设计文档提交到 git
 
-**实现：**
-- 调用 writing-plans 技能创建详细的实现计划
-- 不要调用任何其他技能。writing-plans 是下一步。
+**过渡到实现计划（必须通过子代理）：**
+
+设计文档提交后，通过 Task 工具派遣 planner 子代理创建实现计划：
+
+```
+Task 工具 (subagent_type="planner"):
+  description: "编写实现计划：[功能名称]"
+  prompt: |
+    请为以下已批准的设计创建详细实现计划。
+
+    ## 设计文档路径
+    docs/design/[YYYY-MM-DD-主题-design.md]
+
+    ## 设计摘要
+    [将设计文档的核心内容直接粘贴在这里，不要让子代理自己读文件]
+
+    请调用 superpowers:writing-plans 技能，将设计拆解为精确的 TDD
+    任务序列，保存到 docs/plans/，并提供执行方式选择。
+```
+
+**为什么是子代理而不是直接调用 skill：**
+- 派遣子代理 → 使用 planner agent 绑定的 GLM-5 模型
+- 直接调用 skill → 使用当前主模型，GLM-5 不参与
+
+**不要：**
+- 直接调用 superpowers:writing-plans skill（主模型执行，模型不切换）
+- 调用 frontend-design、mcp-builder 或任何其他实现技能
 
 ## 关键原则
 
@@ -164,4 +184,4 @@ digraph brainstorming {
 
 ## 结束声明
 
-完成设计文档编写并提交后，宣布："头脑风暴完成。设计文档已保存到 `docs/design/`。"
+planner 子代理派遣后，宣布："头脑风暴完成。设计文档已保存到 `docs/design/`，已派遣 planner 子代理创建实现计划。"

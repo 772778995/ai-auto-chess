@@ -32,7 +32,7 @@
 |------|------|
 | 前端 | Vue 3 + Phaser 3 + Pinia + UnoCSS + Vite |
 | 后端 | Hono.js + Bun + PostgreSQL + WebSocket |
-| 共享 | TypeScript + Zod + msgpackr |
+| 共享 | TypeScript + Zod + msgpackr + jsondiffpatch |
 
 ---
 
@@ -41,9 +41,9 @@
 ```
 ai-game/
 ├── packages/
-│   ├── shared/      # 类型、常量、数据
-│   ├── server/     # 后端服务
-│   └── web/        # 前端应用
+│   ├── shared/      # 类型、常量、数据（必须最先构建）
+│   ├── server/     # 后端服务（依赖 shared）
+│   └── web/        # 前端应用（依赖 shared）
 └── docs/
     ├── design/     # 游戏设计文档（静态）
     ├── plans/      # 实现计划（TDD 计划）
@@ -55,12 +55,67 @@ ai-game/
 ## 开发命令
 
 ```bash
-bun install                      # 安装依赖
-cd packages/shared && bun run build  # 构建共享包
-docker-compose up -d            # 启动数据库
-bun run dev                     # 启动开发服务器
-bun run build                   # 构建
+bun install                          # 安装依赖
+cd packages/shared && bun run build  # ⚠️ 必须先构建 shared
+docker-compose up -d                 # 启动数据库
+bun run dev                          # 启动开发服务器
+bun run build                        # 全量构建（按依赖顺序）
+bun test                             # 运行所有测试
 ```
+
+---
+
+## ⚠️ 项目专属编码约定（所有子代理必须遵守）
+
+这些是本项目独有的约定，与通用最佳实践不同。**实现前必须读完这一节。**
+
+### UnoCSS 属性模式
+
+本项目使用 UnoCSS 的**属性模式**，所有样式通过带 `_` 前缀的 HTML 属性书写，**不使用 `class=`**。
+
+```vue
+<!-- ✅ 正确：使用 _ 前缀属性 -->
+<div _flex _items-center _gap-4 _bg-white _rounded-lg>
+  <span _text-lg _font-bold _text-gray-800>标题</span>
+</div>
+
+<!-- ❌ 错误：使用 class -->
+<div class="flex items-center gap-4 bg-white rounded-lg">
+```
+
+### WebSocket 消息序列化
+
+所有 WebSocket 消息**必须使用 msgpackr 序列化**，禁止直接使用 `JSON.stringify`。
+
+```typescript
+// ✅ 正确
+import { pack, unpack } from 'msgpackr'
+ws.send(pack({ type: 'game_state', payload: state }))
+const msg = unpack(data)
+
+// ❌ 错误
+ws.send(JSON.stringify({ type: 'game_state', payload: state }))
+```
+
+### 包构建顺序（强制）
+
+`packages/shared` 必须在 `server` 和 `web` 之前构建。测试和开发任务中若涉及多包，构建顺序：
+
+```
+shared → server / web（可并行）
+```
+
+### 文件行数上限
+
+**单文件不超过 400 行。** 超过时需拆分为多个职责清晰的文件。
+
+### TypeScript 严格类型
+
+禁止使用 `any`。使用 `unknown` 后 narrow，或在 `packages/shared/src/types/` 中定义精确类型。
+
+### 状态同步（jsondiffpatch）
+
+游戏状态增量同步使用 `jsondiffpatch`，不发送全量状态。diff 通过 msgpackr 序列化后发送。
 
 ---
 
@@ -87,33 +142,37 @@ bun run build                   # 构建
 ### 示例
 
 ❌ **错误做法**：直接实现"连击：每次攻击+1伤害"
-✅ **正确做法**：先读取 `04-词条系统.md`，确认是否有该词条及其精确效果
+✅ **正确做法**：先读取 `词条系统-design.md`，确认是否有该词条及其精确效果
 
 ❌ **错误做法**：商店每回合刷新2张卡
-✅ **正确做法**：先读取 `01-经济系统.md`，确认商店刷新机制
+✅ **正确做法**：先读取 `经济系统-design.md`，确认商店刷新机制
 
 ---
 
-## 开发约定
+## 文件命名约定
 
-### 代码风格
-
-- 使用 UnoCSS 属性模式：`_前缀="值"`
-- 单文件不超过 400 行
+- 组件: PascalCase（如 `GameBoard.vue`）
+- 工具函数: camelCase（如 `gameUtils.ts`）
 - 注释应解释"为什么"而非"是什么"
-
-### 文件命名
-
-- 组件: PascalCase (如 `GameBoard.vue`)
-- 工具函数: camelCase (如 `gameUtils.ts`)
 
 ---
 
 ## Superpowers 工作流
 
 ```
-brainstorming → writing-plans → executing-plans → finishing
+brainstorming → writing-plans → subagent-driven-development / executing-plans → finishing
 ```
+
+### 模型分工（子代理）
+
+| 角色 | Agent | 模型 |
+|------|-------|------|
+| 头脑风暴 | brainstormer | Kimi K2.5 |
+| 写计划 | planner | GLM-5 |
+| 写代码 | implementer | MiniMax M2.5 |
+| 规范审查 | spec-reviewer | GLM-5 |
+| 质量审查 | code-quality-reviewer | MiniMax M2.5 |
+| 代码审查 | code-reviewer | MiniMax M2.5 |
 
 ### 常用技能
 
@@ -121,7 +180,8 @@ brainstorming → writing-plans → executing-plans → finishing
 |------|----------|
 | `brainstorming` | 创建功能前 |
 | `writing-plans` | 有功能规格需要实现 |
-| `executing-plans` | 执行实现计划 |
+| `subagent-driven-development` | 在当前会话执行计划 |
+| `executing-plans` | 在新会话执行计划 |
 | `systematic-debugging` | 遇到 bug |
 
 ### 文档规范
@@ -131,11 +191,6 @@ brainstorming → writing-plans → executing-plans → finishing
 | 设计文档 | `docs/design/` | `YYYY-MM-DD-<主题>-design.md` |
 | 实现计划 | `docs/plans/` | `YYYY-MM-DD-<序号>-<任务名>-plan.md` |
 | 路线图 | `docs/roadmap/` | `README.md` + 层级目录 |
-
-#### 示例
-
-- 设计文档：`docs/design/2026-03-07-单机闯关模式-design.md`
-- 实现计划：`docs/plans/2026-03-07-01-类型定义-plan.md`
 
 ---
 

@@ -13,6 +13,6 @@ disable-model-invocation: true
    批次审查通过 code-reviewer 子代理完成
 
 **模型分工：**
-- 实现代码 → subagent_type="implementer"（MiniMax M2.5）
-- 代码审查 → subagent_type="code-reviewer"（MiniMax M2.5）
-- 规范检查 → subagent_type="spec-reviewer"（GLM-5）
+- 实现代码 → subagent_type="implementer"
+- 代码审查 → subagent_type="code-reviewer"
+- 规范检查 → subagent_type="spec-reviewer"
